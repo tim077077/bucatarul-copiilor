@@ -61,6 +61,15 @@ for (const name of allPages) {
   for (const attr of ['for', 'aria-controls', 'aria-labelledby', 'aria-describedby']) {
     main.find(`[${attr}]`).each((_, el) => $(el).attr(attr, $(el).attr(attr).split(' ').map((v) => pre + v).join(' ')));
   }
+  // Inline local images (photos) so the single file works offline
+  main.find('img[src]').each((_, el) => {
+    const src = $(el).attr('src');
+    if (/^(https?:|data:)/.test(src)) return;
+    const file = path.join(base, src.replace(/^(\.\.\/)+/, '').replace(/^\.?\//, ''));
+    if (!fs.existsSync(file)) return;
+    const ext = path.extname(file).slice(1).replace('jpg', 'jpeg');
+    $(el).attr('src', `data:image/${ext};base64,${fs.readFileSync(file).toString('base64')}`);
+  });
   main.find('a[href]').each((_, el) => {
     $(el).attr('href', fixHref($(el).attr('href'), name));
   });

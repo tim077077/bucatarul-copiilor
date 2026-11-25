@@ -3,7 +3,7 @@
 // The menu runs on a 4-week cycle: week buttons (aria-pressed) pick the cycle week,
 // day tabs follow the WAI-ARIA tabs pattern (arrow keys, Home/End).
 import Photo from './Photo.astro';
-import { cycle, meals, cycleStart, shotId } from '../data/menu';
+import { cycle, meals, cycleStart, shotId, platePhotos } from '../data/menu';
 interface Props { id?: string; size?: 'hero' | 'full' }
 const { id = 'board', size = 'hero' } = Astro.props;
 const days = cycle[0].days;
@@ -50,7 +50,7 @@ const days = cycle[0].days;
       <span class="board__blob" aria-hidden="true"></span>
       {cycle.map((wk, w) => wk.days.map((d, i) => (
         <div class="board__plateimg" data-plate={`${w}-${i}`} hidden={w !== 0 || i !== 0}>
-          <Photo shot={shotId(w, i)} brief={`Farfuria de prânz, săptămâna ${w + 1}, ${d.name.toLowerCase()}: ${d.plate}. Fotografiată de sus.`} ratio="1 / 1" round eager={w === 0 && i === 0} />
+          <Photo shot={shotId(w, i)} src={platePhotos[shotId(w, i)]} brief={`Farfuria de prânz, săptămâna ${w + 1}, ${d.name.toLowerCase()}: ${d.plate}. Fotografiată de sus.`} ratio="1 / 1" round eager={w === 0 && i === 0} />
         </div>
       )))}
     </div>

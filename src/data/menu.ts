@@ -53,3 +53,14 @@ export const cycle: Week[] = [
 
 /** Photo shot id for a cycle day, e.g. week 2 Wednesday -> "M2-3" (see the shot list in README). */
 export const shotId = (w: number, d: number) => `M${w + 1}-${d + 1}`;
+
+// Lunch photos per cycle day (shotId -> file in public/photos/meniu). Photos supplied by the client
+// in Nov 2026 (downloaded from the web, licence not verified; two with visible watermarks were left out).
+// Replace with Marius's own photos as they arrive. Days without an entry show the logo placeholder.
+const P = (f: string) => `/photos/meniu/${f}.webp`;
+export const platePhotos: Record<string, string> = {
+  'M1-1': P('supa-legume'), 'M1-2': P('supa-pui-taitei'), 'M1-3': P('paste-bolognese'), 'M1-4': P('mamaliguta'), 'M1-5': P('ciorba-a-la-grec'),
+  'M2-1': P('paste-rosii'), 'M2-3': P('varza-a-la-cluj'), 'M2-5': P('mazare-chiftele'),
+  'M3-1': P('paste-branza'), 'M3-2': P('mamaliguta'), 'M3-3': P('supa-legume'), 'M3-4': P('supa-crema-morcov'), 'M3-5': P('ciorba-a-la-grec'),
+  'M4-1': P('paste-branza'), 'M4-5': P('paste-bolognese'),
+};
