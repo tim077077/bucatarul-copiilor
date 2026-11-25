@@ -38,6 +38,11 @@ import { nav, site } from '../data/site';
   <div class="wrap ftr__base small">
     <p>© {new Date().getFullYear()} Bucătarul copiilor</p>
     <a href="/confidentialitate">Politica de confidențialitate</a>
+    <!-- ANPC Order 449/2022 as amended by Order 270/2026 (MO 420/19.05.2026): only the SAL pictogram, 250x50, linking to reclamatiisal.anpc.ro.
+         Official file is 201x50; object-fit keeps its proportions inside the 250x50 box. -->
+    <a class="ftr__anpc" href="https://reclamatiisal.anpc.ro/" target="_blank" rel="noopener nofollow">
+      <img src="/img/anpc-sal.png" width="250" height="50" alt="ANPC – Soluționarea alternativă a litigiilor (SAL)" loading="lazy" decoding="async" />
+    </a>
   </div>
 </footer>
 <style>
@@ -52,8 +57,12 @@ import { nav, site } from '../data/site';
   .ftr a:hover { color: var(--on-green); text-decoration: underline; }
   .ftr__contact a { display: inline-flex; align-items: flex-start; gap: 10px; }
   .ftr__contact :global(.icon) { flex: none; margin-top: 2px; color: var(--galbenus); }
-  .ftr__base { display: flex; justify-content: space-between; gap: var(--s-4); flex-wrap: wrap; border-top: 1px solid rgb(255 249 238 / 0.15); margin-top: var(--s-8); padding-top: var(--s-5); }
+  .ftr__anpc { display: block; line-height: 0; }
+  .ftr__anpc img { width: 250px; height: 50px; object-fit: contain; }
+  .ftr__base { display: flex; justify-content: space-between; align-items: center; gap: var(--s-4); flex-wrap: wrap; border-top: 1px solid rgb(255 249 238 / 0.15); margin-top: var(--s-8); padding-top: var(--s-5); }
   @media (max-width: 920px) { .ftr__grid { grid-template-columns: 1fr 1fr; } .ftr__brand { grid-column: 1 / -1; } }
+  /* room for the fixed MobileBar (shown at <=920px); declared here so it beats the scoped .ftr padding */
+  @media (max-width: 920px) { .ftr { padding-bottom: calc(var(--s-6) + 80px + env(safe-area-inset-bottom)); } }
   @media (max-width: 520px) {
     /* Phone: page links are already in the burger menu and the bottom bar, so the footer keeps contact only */
     .ftr { padding-top: var(--s-7); }
