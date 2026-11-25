@@ -1,0 +1,67 @@
+---
+import Base from '../layouts/Base.astro';
+import MenuBoard from '../components/MenuBoard.astro';
+import Allergens from '../components/Allergens.astro';
+import Faq from '../components/Faq.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { faqSchema } from '../data/faq';
+
+const principles = [
+  { title: 'Ciclu de 4 săptămâni', text: 'Meniul se repetă la fiecare 4 săptămâni, așa că educatoarele și părinții știu dinainte ce se mănâncă în fiecare zi.' },
+  { title: 'Supă sau ciorbă în fiecare zi', text: 'Prânzul are mereu două feluri: o supă sau o ciorbă și un fel principal, cu carne, paste, orez sau mămăliguță.' },
+  { title: 'Gustări făcute în casă', text: 'Gustarea o pregătim tot în bucătăria noastră: chec, plăcintă, brioșe, papanași.' },
+  { title: 'Ingrediente proaspete', text: 'Gătim în fiecare dimineață, din ingrediente proaspete.' },
+];
+---
+<Base title="Meniu pentru copii, pe 4 săptămâni" description="Meniul pentru creșe și grădinițe pe un ciclu de 4 săptămâni: mic dejun, prânz cald și gustare, în fiecare zi lucrătoare. Alergenii marcați pe fiecare meniu." schema={[faqSchema('meniu')]}>
+  <section class="mhero">
+    <div class="wrap">
+      <div class="section-head">
+        <h1>Meniul pe 4 săptămâni</h1>
+        <p>Meniul nostru se repetă în ciclu de 4 săptămâni. Alegeți săptămâna și ziua ca să vedeți ce mănâncă copiii. Pentru copiii cu alergii pregătim variantele lor.</p>
+      </div>
+      <MenuBoard id="full-board" size="full" />
+    </div>
+  </section>
+
+  <section class="section section--alt" aria-labelledby="pr-h">
+    <div class="wrap">
+      <div class="section-head"><h2 id="pr-h">Cum gândim meniul</h2></div>
+      <ul class="pr">
+        {principles.map((p) => <li><h3>{p.title}</h3><p>{p.text}</p></li>)}
+      </ul>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="alg-h">
+    <div class="wrap alg">
+      <div class="stack">
+        <h2 id="alg-h">Alergeni</h2>
+        <p class="lead">Pe fiecare meniu marcăm alergenii prezenți. Pentru copiii cu alergii sau regim special pregătim variantele lor.</p>
+      </div>
+      <Allergens />
+    </div>
+  </section>
+
+  <section class="section section--alt" aria-labelledby="faq-h">
+    <div class="wrap narrow">
+      <h2 id="faq-h" class="faq-title">Întrebări despre meniu</h2>
+      <Faq tag="meniu" />
+    </div>
+  </section>
+
+  <CtaBand title="Vreți meniul pentru grădinița voastră?" text="Spuneți-ne vârstele copiilor și alergiile din grupe. Vă trimitem un meniu de probă și oferta." />
+</Base>
+<style>
+  .mhero { padding-block: clamp(2.5rem, 1.5rem + 4vw, 5rem) var(--section-y); }
+  .mhero .section-head { margin-bottom: var(--s-7); }
+  .pr { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--s-6); }
+  .pr li { border-top: 2px solid var(--patrunjel); padding-top: var(--s-4); }
+  .pr h3 { font-size: var(--step-1); margin-bottom: var(--s-2); }
+  .pr p { color: var(--ink-muted); }
+  .alg { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-8); align-items: center; }
+  .narrow { max-width: 820px; }
+  .faq-title { margin-bottom: var(--s-6); }
+  @media (max-width: 900px) { .pr { grid-template-columns: 1fr 1fr; } .alg { grid-template-columns: 1fr; gap: var(--s-6); } }
+  @media (max-width: 520px) { .pr { grid-template-columns: 1fr; } }
+</style>

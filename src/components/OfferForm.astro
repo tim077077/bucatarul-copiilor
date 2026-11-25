@@ -1,0 +1,239 @@
+---
+// Offer request. Posted to /trimite-oferta.php on the cPanel hosting, which emails Marius's inbox.
+import Button from './Button.astro';
+interface Props { variant?: 'full' | 'short' | 'event'; id?: string; dark?: boolean }
+const { variant = 'full', id = 'oferta', dark = false } = Astro.props;
+---
+<form class:list={['form', `form--${variant}`, { 'form--dark': dark }]} id={id} action="/trimite-oferta.php" method="POST" novalidate data-form>
+  <input type="checkbox" name="botcheck" class="visually-hidden" tabindex="-1" autocomplete="off" aria-hidden="true" />
+
+  <div class="form__grid">
+    <div class="field">
+      <label for={`${id}-nume`}>Numele vostru</label>
+      <input id={`${id}-nume`} name="nume" autocomplete="name" required />
+      <p class="field__err" data-err="Scrieți numele, ca să știm pe cine căutăm."></p>
+    </div>
+
+    {variant !== 'event' && (
+      <div class="field">
+        <label for={`${id}-inst`}>Instituția</label>
+        <input id={`${id}-inst`} name="institutia" autocomplete="organization" placeholder="ex. Grădinița Albinuța" required />
+        <p class="field__err" data-err="Scrieți numele creșei, grădiniței sau afterschool-ului."></p>
+      </div>
+    )}
+
+    {variant === 'full' && (
+      <fieldset class="field field--wide">
+        <legend>Tipul unității</legend>
+        <div class="pills">
+          {['Creșă', 'Grădiniță', 'Afterschool', 'Altceva'].map((t, i) => (
+            <label class="pill"><input type="radio" name="tip" value={t} checked={i === 1} /><span>{t}</span></label>
+          ))}
+        </div>
+      </fieldset>
+    )}
+
+    {variant === 'event' && (
+      <>
+        <div class="field">
+          <label for={`${id}-ev`}>Tipul evenimentului</label>
+          <input id={`${id}-ev`} name="eveniment" placeholder="ex. concurs de alergare, tabără, aniversare" required />
+          <p class="field__err" data-err="Spuneți-ne pe scurt ce fel de eveniment organizați."></p>
+        </div>
+        <div class="field">
+          <label for={`${id}-data`}>Data evenimentului</label>
+          <input id={`${id}-data`} name="data_eveniment" type="date" required />
+          <p class="field__err" data-err="Alegeți data evenimentului."></p>
+        </div>
+      </>
+    )}
+
+    <div class="field">
+      <label for={`${id}-nr`}>{variant === 'event' ? 'Număr aproximativ de persoane' : 'Număr aproximativ de copii'}</label>
+      <input id={`${id}-nr`} name={variant === 'event' ? 'nr_persoane' : 'nr_copii'} type="number" inputmode="numeric" min="1" required />
+      <p class="field__err" data-err="Scrieți un număr aproximativ, chiar și estimat."></p>
+    </div>
+
+    {variant === 'full' && (
+      <>
+        <div class="field">
+          <label for={`${id}-loc`}>Localitatea</label>
+          <input id={`${id}-loc`} name="localitatea" autocomplete="address-level2" placeholder="ex. Timișoara" />
+        </div>
+        <div class="field">
+          <label for={`${id}-varste`}>Vârstele copiilor <span class="opt">(opțional)</span></label>
+          <input id={`${id}-varste`} name="varste" placeholder="ex. 2–6 ani" />
+        </div>
+        <div class="field">
+          <label for={`${id}-start`}>De când ați începe? <span class="opt">(opțional)</span></label>
+          <input id={`${id}-start`} name="data_start" type="date" />
+        </div>
+        <fieldset class="field field--wide">
+          <legend>Aveți copii cu alergii sau regim special?</legend>
+          <div class="pills">
+            {['Da', 'Nu', 'Nu știu încă'].map((t, i) => (
+              <label class="pill"><input type="radio" name="alergii" value={t} checked={i === 2} /><span>{t}</span></label>
+            ))}
+          </div>
+        </fieldset>
+      </>
+    )}
+
+    <div class="field">
+      <label for={`${id}-tel`}>Telefon</label>
+      <input id={`${id}-tel`} name="telefon" type="tel" autocomplete="tel" inputmode="tel" required pattern="[0-9 +().\-]{9,}" />
+      <p class="field__err" data-err="Scrieți un număr de telefon valid, ex. 0743 064 433."></p>
+    </div>
+
+    {variant !== 'short' && (
+      <div class="field">
+        <label for={`${id}-email`}>Email <span class="opt">(opțional)</span></label>
+        <input id={`${id}-email`} name="email" type="email" autocomplete="email" />
+        <p class="field__err" data-err="Adresa de email pare incompletă. Verificați @ și domeniul."></p>
+      </div>
+    )}
+
+    {variant !== 'short' && (
+      <div class="field field--wide">
+        <label for={`${id}-msg`}>Mesaj <span class="opt">(opțional)</span></label>
+        <textarea id={`${id}-msg`} name="mesaj" rows="4" placeholder="Orice detaliu ne ajută: mesele de care aveți nevoie, ora livrării, alergii."></textarea>
+      </div>
+    )}
+
+    <div class="field field--wide field--check">
+      <label class="check"><input type="checkbox" name="gdpr" value="acord" required /><span>Sunt de acord ca datele mele să fie folosite pentru a primi o ofertă, conform <a href="/confidentialitate">politicii de confidențialitate</a>.</span></label>
+      <p class="field__err" data-err="Bifați acordul, altfel nu vă putem contacta."></p>
+    </div>
+  </div>
+
+  <div class="form__foot">
+    <Button type="submit" size="lg" variant={dark ? 'light' : 'primary'} data-submit>Trimite cererea</Button>
+    <p class="form__status" role="status" aria-live="polite" data-status></p>
+  </div>
+  <div class="form__done" data-done hidden tabindex="-1">
+    <svg viewBox="0 0 52 52" aria-hidden="true"><circle cx="26" cy="26" r="24" /><path d="M15 27l7 7 15-16" /></svg>
+    <p class="form__done-title">Am primit cererea.</p>
+    <p>Marius vă sună în cel mult o zi lucrătoare. Dacă e urgent, sunați direct la <a href="tel:+40743064433" class="tabular">0743 064 433</a>.</p>
+  </div>
+</form>
+
+<style>
+  .form { --fbg: var(--surface); --fink: var(--ink); --flabel: var(--ink-head); --fline: var(--line-strong); position: relative; }
+  .form--dark { --flabel: var(--on-green); }
+  .form__grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-5); }
+  .form--short .form__grid { grid-template-columns: repeat(2, 1fr); }
+  .field { display: grid; gap: 6px; border: 0; padding: 0; min-width: 0; align-content: start; }
+  .field--wide { grid-column: 1 / -1; }
+  label, legend { font-weight: 700; font-size: 0.9375rem; color: var(--flabel); }
+  legend { margin-bottom: 8px; padding: 0; }
+  .opt { font-weight: 400; opacity: 0.75; }
+  input:not([type=radio]):not([type=checkbox]), textarea {
+    width: 100%; min-height: 50px; padding: 0.75rem 0.9rem; border-radius: var(--r-input);
+    border: 1.5px solid var(--fline); background: var(--fbg); color: var(--fink); font-size: 1rem;
+    transition: border-color var(--t-fast), box-shadow var(--t-fast);
+  }
+  textarea { resize: vertical; min-height: 120px; }
+  input::placeholder, textarea::placeholder { color: #5f6a63; }
+  input:hover, textarea:hover { border-color: var(--patrunjel-300); }
+  input:focus-visible, textarea:focus-visible { outline: none; border-color: var(--patrunjel); box-shadow: 0 0 0 4px rgb(209 59 37 / 0.25); }
+  .field.is-invalid input, .field.is-invalid textarea { border-color: var(--error); }
+  .field__err { color: var(--error); font-size: 0.875rem; font-weight: 500; min-height: 0; }
+  .form--dark .field__err { color: #ffd7cf; }
+  .form--dark .field.is-invalid input { border-color: #ffb4a6; }
+
+  .pills { display: flex; flex-wrap: wrap; gap: 8px; }
+  .pill input { position: absolute; opacity: 0; pointer-events: none; }
+  .pill span {
+    display: inline-flex; align-items: center; min-height: 44px; padding: 0 18px; border-radius: var(--r-pill);
+    border: 1.5px solid var(--fline); background: var(--fbg); color: var(--ink-head); font-weight: 500; cursor: pointer;
+    transition: background-color var(--t-fast), border-color var(--t-fast), color var(--t-fast);
+  }
+  .pill span:hover { border-color: var(--patrunjel); }
+  .pill input:checked + span { background: var(--patrunjel); border-color: var(--patrunjel); color: var(--on-green); }
+  .pill input:focus-visible + span { outline: 3px solid var(--focus); outline-offset: 2px; }
+
+  .check { display: flex; gap: 12px; align-items: flex-start; font-weight: 400; cursor: pointer; }
+  .check input { flex: none; width: 22px; height: 22px; margin-top: 2px; accent-color: var(--patrunjel); }
+  .form--dark .check a { color: var(--galbenus); }
+
+  .form__foot { display: flex; align-items: center; gap: var(--s-5); flex-wrap: wrap; margin-top: var(--s-6); }
+  .form__status { font-weight: 500; }
+  .form.is-sending [data-submit] { opacity: 0.7; pointer-events: none; }
+
+  .form__done { display: grid; align-content: center; justify-items: start; gap: var(--s-3); min-height: 16rem; }
+  .form__done:not([hidden]) { animation: done-in 420ms var(--ease-out); }
+  .form__done svg { width: 56px; height: 56px; fill: none; stroke: var(--patrunjel-700); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+  .form--dark .form__done svg { stroke: var(--galbenus); }
+  .form__done circle { stroke-dasharray: 151; stroke-dashoffset: 151; animation: draw 600ms var(--ease-out) forwards; }
+  .form__done path { stroke-dasharray: 40; stroke-dashoffset: 40; animation: draw 400ms var(--ease-out) 400ms forwards; }
+  .form__done-title { font-family: var(--font-display); font-size: var(--step-3); color: var(--flabel); }
+  @keyframes draw { to { stroke-dashoffset: 0; } }
+  @keyframes done-in { from { opacity: 0; transform: translateY(8px); } }
+  /* Sent: the form collapses to the confirmation, so it sits where the visitor is looking */
+  .form.is-done > :not(.form__done) { display: none; }
+
+  @media (max-width: 640px) {
+    .form__grid, .form--short .form__grid { grid-template-columns: 1fr; }
+    .form__foot :global(.btn) { width: 100%; }
+  }
+</style>
+
+<script>
+  function initForms() {
+    document.querySelectorAll<HTMLFormElement>('[data-form]').forEach((form) => {
+      if (form.dataset.ready) return;
+      form.dataset.ready = '1';
+      const status = form.querySelector<HTMLElement>('[data-status]')!;
+      const done = form.querySelector<HTMLElement>('[data-done]')!;
+
+      const check = (input: HTMLInputElement | HTMLTextAreaElement) => {
+        const field = input.closest('.field');
+        const err = field?.querySelector<HTMLElement>('.field__err');
+        if (!field || !err) return true;
+        const ok = input.checkValidity();
+        field.classList.toggle('is-invalid', !ok);
+        input.setAttribute('aria-invalid', String(!ok));
+        err.textContent = ok ? '' : err.dataset.err ?? '';
+        if (err.id === '') err.id = `${input.id || input.name}-err`;
+        input.setAttribute('aria-describedby', err.id);
+        return ok;
+      };
+      const inputs = [...form.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>('input[required], input[type=email], textarea[required]')];
+      inputs.forEach((i) => {
+        i.addEventListener('blur', () => { if (i.value || i.type === 'checkbox') check(i); });
+        i.addEventListener('input', () => { if (i.closest('.field')?.classList.contains('is-invalid')) check(i); });
+      });
+
+      const openedAt = Date.now();
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const bad = inputs.filter((i) => !check(i));
+        if (bad.length) { status.textContent = 'Verificați câmpurile marcate.'; bad[0].focus(); return; }
+        if (location.protocol === 'file:') {
+          status.textContent = 'Formularul trimite doar de pe site-ul online. Sunați la 0743 064 433 sau scrieți la marius@bucatarulcopiilor.ro.';
+          return;
+        }
+        const data = new FormData(form);
+        data.set('elapsed', String(Date.now() - openedAt));
+        form.classList.add('is-sending');
+        status.textContent = 'Se trimite…';
+        try {
+          const res = await fetch(form.action, { method: 'POST', body: data, headers: { Accept: 'application/json' } });
+          const json = await res.json().catch(() => ({}));
+          if (!res.ok || !json.success) { status.textContent = json.message || 'Cererea nu a plecat. Încercați din nou sau sunați la 0743 064 433.'; return; }
+          status.textContent = '';
+          form.classList.add('is-done');
+          done.hidden = false;
+          done.focus({ preventScroll: true });
+          done.scrollIntoView({ block: 'center', behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+        } catch {
+          status.textContent = 'Cererea nu a plecat. Verificați conexiunea și încercați din nou, sau sunați la 0743 064 433.';
+        } finally {
+          form.classList.remove('is-sending');
+        }
+      });
+    });
+  }
+  document.addEventListener('astro:page-load', initForms);
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initForms); else initForms();
+</script>

@@ -1,0 +1,25 @@
+---
+import OfferForm from './OfferForm.astro';
+import { site } from '../data/site';
+interface Props { title?: string; text?: string; variant?: 'short' | 'event'; id?: string }
+const { title = 'Hai să gătim pentru copiii voștri', text = 'Spuneți-ne câți copii aveți și unde vă aflați. Vă trimitem oferta și un exemplu de meniu, fără niciun angajament.', variant = 'short', id = 'cerere' } = Astro.props;
+---
+<section class="section section--green cta on-green" aria-labelledby={`${id}-h`}>
+  <div class="wrap cta__grid">
+    <div class="cta__copy">
+      <h2 id={`${id}-h`}>{title}</h2>
+      <p class="lead">{text}</p>
+      <p class="cta__alt">Preferați telefonul? <a href={site.phoneHref} class="tabular">{site.phone}</a></p>
+    </div>
+    <div class="cta__form"><OfferForm variant={variant} id={id} dark /></div>
+  </div>
+</section>
+<style>
+  .cta__grid { display: grid; grid-template-columns: 5fr 6fr; gap: var(--s-8); align-items: center; }
+  .cta__copy { display: grid; gap: var(--s-5); }
+  .cta .lead { color: var(--on-green-muted); }
+  .cta__alt { color: var(--on-green-muted); }
+  .cta__alt a { color: var(--on-green); font-weight: 700; }
+  .cta__form { background: rgb(255 255 255 / 0.06); border: 1px solid rgb(255 249 238 / 0.14); border-radius: var(--r-board); padding: clamp(1.25rem, 1rem + 1.5vw, 2.25rem); }
+  @media (max-width: 900px) { .cta__grid { grid-template-columns: 1fr; gap: var(--s-6); } }
+</style>

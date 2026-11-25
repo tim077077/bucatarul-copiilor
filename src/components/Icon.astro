@@ -1,0 +1,11 @@
+---
+// Phosphor duotone icons, inlined. One family, one weight across the site.
+interface Props { name: string; size?: number; class?: string; label?: string }
+const { name, size = 24, class: cls = '', label } = Astro.props;
+const icons = import.meta.glob('/node_modules/@phosphor-icons/core/assets/duotone/*.svg', { query: '?raw', import: 'default', eager: true }) as Record<string, string>;
+const raw = icons[`/node_modules/@phosphor-icons/core/assets/duotone/${name}-duotone.svg`];
+if (!raw) throw new Error(`Icon not found: ${name}`);
+const a11y = label ? `role="img" aria-label="${label}"` : 'aria-hidden="true" focusable="false"';
+const svg = raw.replace('<svg', `<svg width="${size}" height="${size}" class="icon ${cls}" ${a11y}`);
+---
+<Fragment set:html={svg} />

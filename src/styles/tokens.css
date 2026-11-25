@@ -1,0 +1,89 @@
+/* Bucătarul copiilor — design tokens
+   World: "Meniul săptămânii" — the weekly menu pinned on every kindergarten door.
+   Palette evolved from the client's own social flyer (milk, parsley, tomato, yolk). */
+
+:root {
+  /* Core palette */
+  --lapte: #fff9ee;        /* page ground — milk */
+  --patrunjel: #1f4a33;    /* parsley — headings, nav, brand bands */
+  --rosie: #d13b25;        /* tomato — primary action, links */
+  --galbenus: #f5c344;     /* yolk — small highlights, never text */
+  --menta: #e3eddc;        /* mint — alternate ground, board surface */
+  --carbune: #1c2621;      /* charcoal — body text */
+
+  /* Tonal steps */
+  --patrunjel-900: #12301f;
+  --patrunjel-700: #2a6143;
+  --patrunjel-300: #9fbfa9;
+  --patrunjel-100: #d4e3d6;
+  --rosie-700: #b02f1b;
+  --rosie-100: #fbe1db;
+  --galbenus-100: #fdf0c8;
+  --menta-200: #d3e2c9;
+
+  /* Roles */
+  --bg: var(--lapte);
+  --bg-alt: var(--menta);
+  --surface: #ffffff;
+  --ink: var(--carbune);
+  --ink-head: var(--patrunjel);
+  --ink-muted: #4a5a50;
+  --on-green: #fff9ee;
+  --on-green-muted: #c9dccd;
+  --line: #e2dccd;
+  --line-strong: #cfc7b3;
+  --action: var(--rosie);
+  --action-hover: var(--rosie-700);
+  --focus: var(--rosie);
+  --error: #b3261e;
+  --success: var(--patrunjel-700);
+
+  /* Type */
+  --font-display: 'Young Serif', 'Georgia Fallback', Georgia, serif;
+  --font-body: 'Figtree', 'Arial Fallback', system-ui, sans-serif;
+  --step--1: 0.875rem;                               /* 14 */
+  --step-0: 1.0625rem;                               /* 17 body */
+  --step-1: clamp(1.2rem, 1.1rem + 0.35vw, 1.3125rem);   /* 21 */
+  --step-2: clamp(1.45rem, 1.25rem + 0.8vw, 1.75rem);    /* 28 */
+  --step-3: clamp(1.8rem, 1.45rem + 1.5vw, 2.375rem);    /* 38 */
+  --step-4: clamp(2.2rem, 1.6rem + 2.6vw, 3.125rem);     /* 50 */
+  --step-5: clamp(2.6rem, 1.7rem + 3.9vw, 4.1875rem);    /* 67 */
+
+  /* Space */
+  --s-1: 0.25rem; --s-2: 0.5rem; --s-3: 0.75rem; --s-4: 1rem; --s-5: 1.5rem;
+  --s-6: 2rem; --s-7: 3rem; --s-8: 4rem; --s-9: 6rem; --s-10: 8rem;
+  --section-y: clamp(4.5rem, 3rem + 6vw, 8rem);
+  --wrap: 75rem;            /* 1200px at 16px root; grows with the root size on big screens */
+  --gutter: clamp(1rem, 0.5rem + 2.5vw, 2.5rem);
+
+  /* Shape */
+  --r-input: 8px;
+  --r-card: 16px;
+  --r-board: 28px;
+  --r-pill: 999px;
+
+  /* Depth: offset + soft blur, tinted from parsley */
+  --shadow-1: 0 1px 2px rgb(18 48 31 / 0.06), 0 2px 6px rgb(18 48 31 / 0.06);
+  --shadow-2: 0 2px 4px rgb(18 48 31 / 0.05), 0 12px 32px -8px rgb(18 48 31 / 0.18);
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --t-fast: 140ms;
+  --t-base: 220ms;
+  --t-slow: 420ms;
+}
+
+/* Metric-matched fallbacks to limit layout shift while web fonts load */
+@font-face {
+  font-family: 'Georgia Fallback';
+  src: local('Georgia');
+  size-adjust: 104%;
+  ascent-override: 92%;
+}
+@font-face {
+  font-family: 'Arial Fallback';
+  src: local('Arial');
+  size-adjust: 97%;
+  ascent-override: 98%;
+}

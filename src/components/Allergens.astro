@@ -1,0 +1,12 @@
+---
+// The 14 allergens food businesses must declare under EU Regulation 1169/2011.
+const list = ['Gluten', 'Crustacee', 'Ouă', 'Pește', 'Arahide', 'Soia', 'Lapte și lactoză', 'Fructe cu coajă lemnoasă', 'Țelină', 'Muștar', 'Susan', 'Sulfiți', 'Lupin', 'Moluște'];
+---
+<ul class="allergens" data-reveal="stagger" style="--step:35ms" aria-label="Cele 14 alergene declarate">
+  {list.map((a) => <li>{a}</li>)}
+</ul>
+<style>
+  .allergens { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+  @media (max-width: 760px) { .allergens { gap: 6px; } .allergens li { padding: 6px 12px !important; font-size: 0.875rem !important; } }
+  .allergens li { padding: 8px 14px; border-radius: var(--r-pill); background: var(--surface); border: 1px solid var(--line); color: var(--ink-head); font-weight: 500; font-size: 0.9375rem; }
+</style>

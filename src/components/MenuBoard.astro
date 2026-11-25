@@ -1,0 +1,211 @@
+---
+// The signature element: the menu every kindergarten pins on its door, made live.
+// The menu runs on a 4-week cycle: week buttons (aria-pressed) pick the cycle week,
+// day tabs follow the WAI-ARIA tabs pattern (arrow keys, Home/End).
+import Photo from './Photo.astro';
+import { cycle, meals, cycleStart, shotId } from '../data/menu';
+interface Props { id?: string; size?: 'hero' | 'full' }
+const { id = 'board', size = 'hero' } = Astro.props;
+const days = cycle[0].days;
+---
+<div class:list={['board', `board--${size}`]} data-board id={id} data-cycle-start={cycleStart ?? undefined}>
+  <div class="board__head">
+    <p class="board__title">Meniul săptămânii</p>
+    <div class="board__weeks" role="group" aria-label="Săptămâna din ciclul de 4">
+      <span class="board__weeklabel" aria-hidden="true">Săpt.</span>
+      {cycle.map((_, w) => (
+        <button type="button" class="board__week" data-week={w} aria-pressed={w === 0 ? 'true' : 'false'}>
+          <span class="visually-hidden">Săptămâna </span>{w + 1}
+          <span class="board__now" hidden>acum</span>
+        </button>
+      ))}
+    </div>
+    <div class="board__tabs" role="tablist" aria-label="Ziua săptămânii">
+      {days.map((d, i) => (
+        <button role="tab" type="button" class="board__tab" id={`${id}-tab-${d.id}`}
+          aria-controls={`${id}-panel-${d.id}`} aria-selected={i === 0 ? 'true' : 'false'} tabindex={i === 0 ? 0 : -1} data-day={i}>
+          <span aria-hidden="true">{d.short}</span><span class="visually-hidden">{d.name}</span>
+          <span class="board__today" hidden>azi</span>
+        </button>
+      ))}
+    </div>
+  </div>
+
+  <div class="board__body">
+    {days.map((d, i) => (
+      <div role="tabpanel" class="board__panel" id={`${id}-panel-${d.id}`} aria-labelledby={`${id}-tab-${d.id}`} hidden={i !== 0} data-panel={i}>
+        {cycle.map((wk, w) => (
+          <dl class="board__rows" data-week={w} hidden={w !== 0}>
+            {meals.map((m, j) => (
+              <div class:list={['board__row', { 'board__row--main': j === 1 }]} style={`--i:${j}`}>
+                <dt>{m}</dt>
+                <dd>{wk.days[i].items[j]}</dd>
+              </div>
+            ))}
+          </dl>
+        ))}
+      </div>
+    ))}
+    <div class="board__plate" aria-live="polite">
+      <span class="board__blob" aria-hidden="true"></span>
+      {cycle.map((wk, w) => wk.days.map((d, i) => (
+        <div class="board__plateimg" data-plate={`${w}-${i}`} hidden={w !== 0 || i !== 0}>
+          <Photo shot={shotId(w, i)} brief={`Farfuria de prânz, săptămâna ${w + 1}, ${d.name.toLowerCase()}: ${d.plate}. Fotografiată de sus.`} ratio="1 / 1" round eager={w === 0 && i === 0} />
+        </div>
+      )))}
+    </div>
+  </div>
+  <p class="board__note">Meniul se repetă în ciclu de 4 săptămâni. Gramajele sunt pe porție.</p>
+</div>
+
+<style>
+  .board {
+    position: relative; background: var(--surface); border-radius: var(--r-board); box-shadow: var(--shadow-2);
+    padding: clamp(1.25rem, 0.8rem + 1.5vw, 2rem); border: 1px solid var(--line);
+  }
+  .board__head { display: flex; align-items: center; justify-content: space-between; gap: var(--s-4); flex-wrap: wrap; margin-bottom: var(--s-5); }
+  .board__weeks { display: flex; align-items: center; gap: 4px; }
+  .board__weeklabel { font-size: var(--step--1); font-weight: 700; color: var(--ink-muted); margin-right: 4px; }
+  .board__week {
+    position: relative; width: 36px; height: 36px; border-radius: 50%; border: 2px solid var(--patrunjel-100);
+    background: transparent; color: var(--patrunjel); font-weight: 700; font-size: 0.9375rem;
+    transition: background-color var(--t-base) var(--ease-out), border-color var(--t-base), color var(--t-base);
+  }
+  .board__week:hover { border-color: var(--patrunjel); }
+  .board__week[aria-pressed='true'] { background: var(--patrunjel); border-color: var(--patrunjel); color: var(--on-green); }
+  .board__now {
+    position: absolute; top: -13px; left: 50%; translate: -50% 0; background: var(--galbenus); color: var(--patrunjel-900);
+    font-size: 10px; font-weight: 700; line-height: 1; padding: 3px 6px; border-radius: var(--r-pill); pointer-events: none;
+  }
+  .board__title { font-family: var(--font-display); font-size: var(--step-1); color: var(--ink-head); }
+  .board__tabs { display: flex; gap: 6px; background: var(--menta); padding: 5px; border-radius: var(--r-pill); width: 100%; }
+  .board__tabs .board__tab { flex: 1; }
+  .board__tab {
+    position: relative; min-width: 44px; height: 40px; padding: 0 12px; border: 0; border-radius: var(--r-pill);
+    background: transparent; color: var(--patrunjel); font-weight: 700; font-size: 0.9375rem;
+    transition: background-color var(--t-base) var(--ease-out), color var(--t-base);
+  }
+  .board__tab:hover { background: rgb(255 255 255 / 0.7); }
+  .board__tab[aria-selected='true'] { background: var(--rosie); color: #fff; }
+  .board__today {
+    position: absolute; top: -14px; left: 50%; translate: -50% 0; background: var(--galbenus); color: var(--patrunjel-900);
+    font-size: 11px; font-weight: 700; line-height: 1; padding: 4px 7px; border-radius: var(--r-pill); pointer-events: none;
+  }
+
+  .board__body { display: grid; grid-template-columns: 1fr 42%; gap: var(--s-5); align-items: center; }
+  .board__rows { display: grid; }
+  .board__row { display: grid; grid-template-columns: 6.5rem 1fr; gap: var(--s-3); padding-block: 0.7rem; border-top: 1px dashed var(--line-strong); }
+  .board__row:first-child { border-top: 0; }
+  .board__row dt { color: var(--ink-muted); font-size: var(--step--1); font-weight: 500; padding-top: 2px; }
+  .board__row dd { color: var(--ink); font-size: 0.975rem; line-height: 1.45; }
+  .board__row--main dd { font-family: var(--font-display); color: var(--ink-head); font-size: 1.125rem; line-height: 1.3; }
+
+  .board__plate { position: relative; align-self: center; justify-self: center; width: 100%; max-width: 20rem; }
+  .board__blob {
+    position: absolute; inset: -6% -8% -4% -4%; background: var(--galbenus-100);
+    border-radius: 58% 42% 55% 45% / 48% 56% 44% 52%; z-index: 0;
+  }
+  .board__plateimg { position: relative; z-index: 1; filter: drop-shadow(0 14px 18px rgb(18 48 31 / 0.18)); }
+  .board__note { margin-top: var(--s-4); font-size: var(--step--1); color: var(--ink-muted); max-width: none; }
+
+  /* Day change: the user's action gets a visible answer */
+  .board__panel.is-in .board__rows:not([hidden]) .board__row { animation: row-in 360ms var(--ease-out) both; animation-delay: calc(var(--i) * 45ms); }
+  .board__plateimg.is-in { animation: plate-in 520ms var(--ease-out) both; }
+  @keyframes row-in { from { opacity: 0; transform: translateY(6px); } }
+  @keyframes plate-in { from { opacity: 0; transform: rotate(-10deg) scale(0.94); } }
+
+  /* The one authored load moment (hero only) */
+  :global(html.js) .board--hero:not(.is-done) { animation: board-in 700ms var(--ease-out) both; }
+  :global(html.js) .board--hero:not(.is-done) .board__panel:not([hidden]) .board__row { animation: row-in 520ms var(--ease-out) both; animation-delay: calc(220ms + var(--i) * 70ms); }
+  :global(html.js) .board--hero:not(.is-done) .board__plateimg:not([hidden]) { animation: plate-reveal 900ms var(--ease-out) 260ms both; }
+  :global(html.js) .board--hero:not(.is-done) .board__blob { animation: blob-in 900ms var(--ease-out) 160ms both; }
+  @keyframes board-in { from { opacity: 0; transform: translateY(14px); } }
+  @keyframes plate-reveal { from { clip-path: circle(0% at 50% 50%); transform: rotate(-14deg); } to { clip-path: circle(75% at 50% 50%); transform: none; } }
+  @keyframes blob-in { from { transform: scale(0.6); opacity: 0; } }
+
+  .board--full .board__body { grid-template-columns: 1fr 38%; }
+
+  .board__body > * { min-width: 0; }
+  @media (max-width: 640px) {
+    .board__body, .board--full .board__body { grid-template-columns: 1fr; }
+    .board__plate { order: -1; width: min(44%, 170px); margin: 0 auto var(--s-2); }
+    .board__plate :global(.photo__tag) { display: none; }
+    .board__row { grid-template-columns: 5.5rem 1fr; }
+    .board__head { justify-content: center; row-gap: var(--s-3); }
+    .board__title { width: 100%; text-align: center; }
+    .board__tabs { margin-top: var(--s-2); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .board *, .board { animation: none !important; }
+  }
+</style>
+
+<script>
+  function initBoards() {
+    document.querySelectorAll<HTMLElement>('[data-board]').forEach((board) => {
+      if (board.dataset.ready) return;
+      board.dataset.ready = '1';
+      const tabs = [...board.querySelectorAll<HTMLButtonElement>('[role=tab]')];
+      const weeks = [...board.querySelectorAll<HTMLButtonElement>('.board__week')];
+      const panels = [...board.querySelectorAll<HTMLElement>('[data-panel]')];
+      const plates = [...board.querySelectorAll<HTMLElement>('[data-plate]')];
+      const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      let week = 0, day = 0, nowWeek = -1, nowDay = -1;
+
+      const render = (animate: boolean, focus = false) => {
+        weeks.forEach((b, w) => b.setAttribute('aria-pressed', String(w === week)));
+        tabs.forEach((t, j) => {
+          t.setAttribute('aria-selected', String(j === day)); t.tabIndex = j === day ? 0 : -1;
+          t.querySelector<HTMLElement>('.board__today')!.hidden = !(week === nowWeek && j === nowDay);
+        });
+        panels.forEach((p, j) => {
+          p.hidden = j !== day; p.classList.remove('is-in');
+          p.querySelectorAll<HTMLElement>('[data-week]').forEach((dl) => { dl.hidden = Number(dl.dataset.week) !== week; });
+        });
+        plates.forEach((p) => { p.hidden = p.dataset.plate !== `${week}-${day}`; p.classList.remove('is-in'); });
+        if (animate && !reduce) {
+          void board.offsetWidth;
+          panels[day].classList.add('is-in');
+          board.querySelector(`[data-plate="${week}-${day}"]`)!.classList.add('is-in');
+        }
+        if (focus) tabs[day].focus();
+      };
+
+      // Open on today's menu: weekday = today, weekend = next Monday.
+      // The cycle week is known only once cycleStart is set (src/data/menu.ts); until then week 1, no "azi".
+      const d = new Date(); d.setHours(12, 0, 0, 0);
+      const wd = d.getDay();
+      if (wd === 0 || wd === 6) d.setDate(d.getDate() + (wd === 6 ? 2 : 1));
+      const start = board.dataset.cycleStart;
+      if (start) {
+        const s = new Date(start + 'T12:00:00');
+        const monday = new Date(d); monday.setDate(d.getDate() - ((d.getDay() + 6) % 7));
+        const n = Math.round((monday.getTime() - s.getTime()) / (7 * 864e5));
+        nowWeek = ((n % weeks.length) + weeks.length) % weeks.length;
+        week = nowWeek;
+        weeks[nowWeek].querySelector<HTMLElement>('.board__now')!.hidden = false;
+        if (wd >= 1 && wd <= 5) nowDay = wd - 1;
+        day = wd >= 1 && wd <= 5 ? wd - 1 : 0;
+      }
+      render(false);
+
+      weeks.forEach((b, w) => b.addEventListener('click', () => { week = w; render(true); }));
+      tabs.forEach((t, i) => {
+        t.addEventListener('click', () => { day = i; render(true); });
+        t.addEventListener('keydown', (e) => {
+          const k = e.key; let n = -1;
+          if (k === 'ArrowRight') n = (i + 1) % tabs.length;
+          if (k === 'ArrowLeft') n = (i - 1 + tabs.length) % tabs.length;
+          if (k === 'Home') n = 0;
+          if (k === 'End') n = tabs.length - 1;
+          if (n >= 0) { e.preventDefault(); day = n; render(true, true); }
+        });
+      });
+
+      if (board.classList.contains('board--hero')) setTimeout(() => board.classList.add('is-done'), reduce ? 0 : 1400);
+      else board.classList.add('is-done');
+    });
+  }
+  document.addEventListener('astro:page-load', initBoards);
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initBoards); else initBoards();
+</script>

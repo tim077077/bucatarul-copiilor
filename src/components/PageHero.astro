@@ -1,0 +1,25 @@
+---
+// Inner-page opening: heading + lead on the left, one photograph on the right.
+import Photo from './Photo.astro';
+import Button from './Button.astro';
+interface Props { title: string; lead: string; shot: string; brief: string; ratio?: string; cta?: string; ctaHref?: string }
+const { title, lead, shot, brief, ratio = '4 / 3', cta = 'Cere o ofertă', ctaHref = '/contact' } = Astro.props;
+---
+<section class="phero">
+  <div class="wrap phero__grid">
+    <div class="phero__copy">
+      <h1>{title}</h1>
+      <p class="lead">{lead}</p>
+      <div class="phero__actions"><Button href={ctaHref} size="lg">{cta}</Button><slot name="actions" /></div>
+    </div>
+    <Photo shot={shot} brief={brief} ratio={ratio} eager />
+  </div>
+</section>
+<style>
+  .phero { padding-block: clamp(2.5rem, 1.5rem + 4vw, 5rem) var(--section-y); }
+  .phero__grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-8); align-items: center; }
+  .phero__copy { display: grid; gap: var(--s-5); }
+  .phero h1 { font-size: var(--step-5); }
+  .phero__actions { display: flex; align-items: center; gap: var(--s-5); flex-wrap: wrap; margin-top: var(--s-2); }
+  @media (max-width: 860px) { .phero__grid { grid-template-columns: 1fr; gap: var(--s-6); } }
+</style>

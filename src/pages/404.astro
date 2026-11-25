@@ -1,0 +1,20 @@
+---
+import Base from '../layouts/Base.astro';
+import Logo from '../components/Logo.astro';
+import Button from '../components/Button.astro';
+---
+<Base title="Pagina nu există" description="Pagina căutată nu există.">
+  <section class="section nf">
+    <div class="wrap nf__in">
+      <span class="nf__mark"><Logo variant="mark" /></span>
+      <h1>Pagina asta nu e pe meniu</h1>
+      <p class="lead">Adresa nu mai există sau a fost scrisă greșit.</p>
+      <Button href="/">Înapoi la pagina principală</Button>
+    </div>
+  </section>
+</Base>
+<style>
+  .nf__in { display: grid; justify-items: center; text-align: center; gap: var(--s-5); }
+  .nf__mark { width: 80px; color: var(--patrunjel); }
+  .nf .lead { margin-inline: auto; }
+</style>

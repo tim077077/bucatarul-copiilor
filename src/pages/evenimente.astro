@@ -1,0 +1,57 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import Photo from '../components/Photo.astro';
+import CtaBand from '../components/CtaBand.astro';
+
+const offers = [
+  { title: 'Concursuri de alergare', text: 'Mese cu fructe proaspete, gustări și băuturi pentru participanți, la start, pe traseu sau la finish.', shot: 'E2', brief: 'Masă de recuperare la finish-ul unui concurs: banane, portocale, apă, alergători în fundal neclari.' },
+  { title: 'Tabere pentru copii', text: 'Mese calde și gustări pentru taberele de câteva zile, cu meniu potrivit copiilor activi.', shot: 'E3', brief: 'Copii la masă în aer liber într-o tabără de munte, fotografiați de la distanță.' },
+  { title: 'Petreceri și aniversări', text: 'Bufet pentru petreceri de copii, cu preparate pe care cei mici chiar le mănâncă.', shot: 'E4', brief: 'Bufet colorat de petrecere pentru copii: fructe, brioșe, sandvișuri mici.' },
+];
+---
+<Base title="Catering pentru evenimente și concursuri" description="Catering pentru concursuri de alergare, tabere și petreceri pentru copii: mese cu fructe, gustări și preparate calde, de la Bucătarul copiilor.">
+  <PageHero title="Catering pentru evenimente și concursuri" lead="Am pregătit mese cu fructe și gustări pentru concursuri de alergare și tabere." shot="E1" brief="Masă lungă cu fructe proaspete și gustări la un concurs de alergare, în aer liber." ratio="4 / 3" cta="Cere o ofertă pentru eveniment" ctaHref="#cerere-eveniment" />
+
+  <section class="section section--alt" aria-labelledby="ce-h">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 id="ce-h">Ce pregătim</h2>
+        <p>Spuneți-ne ce fel de eveniment organizați și câte persoane vin. Facem meniul în funcție de asta.</p>
+      </div>
+      <div class="offers" data-reveal="stagger">
+        {offers.map((o) => (
+          <article class="offer">
+            <Photo shot={o.shot} brief={o.brief} ratio="4 / 3" />
+            <h3>{o.title}</h3>
+            <p>{o.text}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="gal-h">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 id="gal-h">De la evenimentele noastre</h2>
+      </div>
+      <div class="strip" data-reveal="stagger">
+        <Photo shot="E5" brief="Detaliu: felii de pepene și portocale aranjate pe tăvi." ratio="1 / 1" />
+        <Photo shot="E6" brief="Detaliu: brioșe și pâine de casă pe masa de bufet." ratio="1 / 1" />
+        <Photo shot="E7" brief="Echipa pregătind masa înainte de start, fotografiată de aproape." ratio="1 / 1" />
+        <Photo shot="E8" brief="Detaliu: pahare cu apă și fructe pregătite pentru alergători." ratio="1 / 1" />
+      </div>
+    </div>
+  </section>
+
+  <CtaBand title="Organizați un eveniment?" text="Trimiteți-ne data, locul și numărul de persoane. Vă răspundem cu o propunere de meniu și preț." variant="event" id="cerere-eveniment" />
+</Base>
+<style>
+  .offers { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--s-6); }
+  .offer { display: grid; gap: var(--s-3); align-content: start; }
+  .offer h3 { margin-top: var(--s-2); }
+  .offer p { color: var(--ink-muted); }
+  .strip { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--s-5); }
+  @media (max-width: 900px) { .offers { grid-template-columns: 1fr; } .strip { grid-template-columns: 1fr 1fr; } }
+</style>

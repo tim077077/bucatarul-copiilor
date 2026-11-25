@@ -1,0 +1,235 @@
+---
+import Base from '../layouts/Base.astro';
+import Button from '../components/Button.astro';
+import MenuBoard from '../components/MenuBoard.astro';
+import Photo from '../components/Photo.astro';
+import RouteSteps from '../components/RouteSteps.astro';
+import Allergens from '../components/Allergens.astro';
+import Faq from '../components/Faq.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { site } from '../data/site';
+import { faqSchema } from '../data/faq';
+
+const promises = [
+  { title: 'Meniuri adaptate vârstei', text: 'Porții potrivite pentru creșă, grădiniță și afterschool, dintr-un meniu pe 4 săptămâni.' },
+  { title: 'Alergii și regimuri speciale', text: 'Ne spuneți ce nevoi are fiecare copil, iar noi pregătim variantele potrivite, separat.' },
+  { title: 'Livrare caldă, la timp', text: 'Gătim în fiecare dimineață și aducem mâncarea caldă la ușa voastră, în fiecare zi lucrătoare.' },
+  { title: 'Preț fix pe porție', text: 'Știți de la început cât plătiți. Fără costuri ascunse, fără surprize la final de lună.' },
+];
+
+const steps = [
+  { icon: 'calendar-dots', title: 'Primiți meniul', text: 'Meniul e pe 4 săptămâni și se repetă. Ne spuneți alergiile din grupă și pregătim variantele lor.' },
+  { icon: 'cooking-pot', title: 'Gătim dimineața', text: 'Totul se gătește proaspăt, în aceeași zi, în bucătăria noastră din Ghiroda.' },
+  { icon: 'truck', title: 'Livrăm cald', text: 'Mâncarea pleacă în recipiente termice și ajunge la voi la ora stabilită.' },
+  { icon: 'chats-teardrop', title: 'Ajustăm împreună', text: 'Ascultăm ce spun educatoarele și copiii, și schimbăm ce nu merge.' },
+];
+
+const audiences = [
+  { title: 'Creșe', age: '1–3 ani', text: 'Texturi potrivite, porții mici, mese dese.', shot: 'A1', brief: 'Copil mic la masă, mâncând singur cu lingurița; fotografiat din spate sau cu fața neclară.' },
+  { title: 'Grădinițe', age: '3–6 ani', text: 'Trei mese pe zi: mic dejun, prânz cald și gustare.', shot: 'A2', brief: 'Grupă de copii la masa de prânz în grădiniță, farfurii pline, fără fețe identificabile.' },
+  { title: 'Afterschool', age: '6–12 ani', text: 'Prânz sățios după școală și o gustare pentru teme.', shot: 'A3', brief: 'Școlari la prânz în afterschool, tăvi cu mâncare caldă, unghi lateral.' },
+];
+---
+<Base
+  title="Catering pentru creșe și grădinițe | Bucătarul copiilor"
+  description="Mâncare caldă gătită zilnic pentru creșe, grădinițe și afterschool-uri. Meniu pe 4 săptămâni, alergii gestionate, preț fix pe porție. 14 ani de experiență."
+  schema={[faqSchema()]}
+>
+  <!-- 1. Hero: the weekly menu board is the product -->
+  <section class="hero" aria-labelledby="hero-h">
+    <div class="wrap hero__grid">
+      <div class="hero__copy">
+        <h1 id="hero-h">Prânz cald pentru creșe și grădinițe</h1>
+        <p class="lead">Gătim zilnic pentru peste {site.locations} de creșe, grădinițe și afterschool-uri, de {site.years} ani. Meniul e pe 4 săptămâni, așa că știți dinainte ce mănâncă copiii.</p>
+        <div class="hero__actions">
+          <Button href="/contact" size="lg">Cere o ofertă</Button>
+          <a href="/meniu" class="link-draw">Vezi tot meniul</a>
+        </div>
+      </div>
+      <MenuBoard id="hero-board" />
+    </div>
+  </section>
+
+  <!-- 2. Why directors pick us -->
+  <section class="section section--alt" aria-labelledby="why-h">
+    <div class="wrap why">
+      <Photo class="why__photo" reveal="wipe" shot="P1" brief="Chef Marius porționează mâncarea în bucătărie, în haine de bucătar, lumină naturală." ratio="4 / 5" />
+      <div class="why__copy">
+        <div class="section-head">
+          <h2 id="why-h">De ce ne aleg directorii de grădinițe</h2>
+          <p>O singură grijă mai puțin: mâncarea vine la timp, e gustoasă și știți exact ce conține.</p>
+        </div>
+        <ul class="why__list">
+          {promises.map((p) => (
+            <li><h3>{p.title}</h3><p>{p.text}</p></li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. How it works: the delivery route -->
+  <section class="section" aria-labelledby="how-h">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 id="how-h">Cum lucrăm</h2>
+        <p>Din bucătăria din Ghiroda până pe masa copiilor, în aceeași dimineață.</p>
+      </div>
+      <RouteSteps steps={steps} />
+    </div>
+  </section>
+
+  <!-- 4. Who it's for -->
+  <section class="section section--alt" aria-labelledby="who-h">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 id="who-h">Pentru fiecare vârstă, alt meniu</h2>
+        <p>Un copil de doi ani și unul de zece nu mănâncă la fel. Meniul și porțiile se schimbă odată cu ei.</p>
+      </div>
+      <ul class="who" data-reveal="stagger">
+        {audiences.map((a) => (
+          <li>
+            <a href="/catering-gradinite#varste" class="who__card">
+              <Photo shot={a.shot} brief={a.brief} ratio="4 / 5" />
+              <div class="who__text">
+                <h3>{a.title} <span class="who__age">{a.age}</span></h3>
+                <p>{a.text}</p>
+              </div>
+            </a>
+          </li>
+        ))}
+      </ul>
+      <a href="/evenimente" class="events on-green">
+        <div class="events__text">
+          <h3>Evenimente și concursuri</h3>
+          <p>Mese cu fructe și gustări pentru concursuri de alergare, tabere și petreceri pentru copii.</p>
+          <span class="link-draw">Vezi cateringul pentru evenimente</span>
+        </div>
+        <Photo reveal="settle" shot="E1" brief="Masă lungă cu fructe proaspete și gustări la un concurs de alergare, în aer liber." ratio="16 / 9" />
+      </a>
+    </div>
+  </section>
+
+  <!-- 5. Allergies -->
+  <section class="section" aria-labelledby="alg-h">
+    <div class="wrap alg">
+      <div class="alg__copy">
+        <h2 id="alg-h">Alergii și regimuri speciale</h2>
+        <p class="lead">Fiecare copil cu alergie sau regim special primește varianta lui. Ne spuneți de la început, iar noi ținem cont de asta în fiecare zi.</p>
+        <p class="muted">Pe fiecare meniu marcăm alergenii prezenți, așa cum cere legislația europeană.</p>
+      </div>
+      <div class="alg__list">
+        <h3 class="alg__h">Cei 14 alergeni pe care îi urmărim</h3>
+        <Allergens />
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. The chef -->
+  <section class="section section--alt" aria-labelledby="chef-h">
+    <div class="wrap chef">
+      <Photo reveal="wipe" shot="C1" brief="Portret Chef Marius în bucătărie, zâmbind, șorț și boneta de bucătar." ratio="4 / 5" />
+      <div class="chef__copy">
+        <h2 id="chef-h">Salut, sunt Marius</h2>
+        <blockquote>
+          <p>Sunt în bucătărie de dimineață, pregătesc bunătăți pentru copii. De {site.years} ani gătesc pentru cei mici ca și cum ar fi ai mei: simplu, proaspăt și cu gust.</p>
+        </blockquote>
+        <p class="muted">Chef Marius, Bucătarul copiilor</p>
+        <a href="/despre" class="link-draw">Află mai multe despre noi</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. Testimonials: rendered only when real, approved quotes exist (see data). -->
+
+  <!-- 8. FAQ -->
+  <section class="section" aria-labelledby="faq-h">
+    <div class="wrap faqwrap">
+      <div class="section-head">
+        <h2 id="faq-h">Întrebări frecvente</h2>
+        <p>Nu găsiți răspunsul? Sunați-ne la <a href={site.phoneHref} class="tabular">{site.phone}</a>.</p>
+      </div>
+      <Faq collapseAfter={4} />
+    </div>
+  </section>
+
+  <!-- 9. Closing CTA + short form -->
+  <CtaBand />
+</Base>
+
+<style>
+  .hero { padding-block: clamp(2rem, 1rem + 3vw, 3.5rem) clamp(3.5rem, 2rem + 4vw, 6rem); }
+  .hero__grid { display: grid; grid-template-columns: 1fr 1.08fr; gap: clamp(2rem, 1rem + 4vw, 5rem); align-items: center; min-height: min(calc(100svh - 84px - 9.5rem), 640px); }
+  .hero__copy { display: grid; gap: var(--s-5); }
+  .hero h1 { font-size: var(--step-5); max-width: 14ch; }
+  .hero__actions { display: flex; align-items: center; gap: var(--s-6); flex-wrap: wrap; margin-top: var(--s-3); }
+
+  .why { display: grid; grid-template-columns: 5fr 7fr; gap: var(--s-8); align-items: center; }
+  .why__list { list-style: none; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-6) var(--s-7); }
+  .why__list li { border-top: 2px solid var(--patrunjel); padding-top: var(--s-4); }
+  .why__list h3 { font-size: var(--step-1); margin-bottom: var(--s-2); }
+  .why__list p { color: var(--ink-muted); }
+
+  .who { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--s-5); }
+  .who__card { display: grid; gap: var(--s-4); text-decoration: none; color: inherit; transition: transform var(--t-base) var(--ease-out); }
+  .who__card:hover { transform: translateY(-2px); color: inherit; }
+  .who__card h3 { display: flex; align-items: baseline; gap: var(--s-3); flex-wrap: wrap; }
+  .who__card:hover h3 { color: var(--rosie); }
+  .who__age { font-family: var(--font-body); font-size: var(--step--1); font-weight: 700; color: var(--patrunjel); background: var(--galbenus-100); padding: 3px 10px; border-radius: var(--r-pill); }
+  .who__text p { color: var(--ink-muted); margin-top: var(--s-1); }
+
+  .events {
+    margin-top: var(--s-7); display: grid; grid-template-columns: 1fr 1.2fr; gap: var(--s-7); align-items: center;
+    background: var(--patrunjel); color: var(--on-green-muted); border-radius: var(--r-board); padding: clamp(1.25rem, 0.5rem + 2.5vw, 2.5rem);
+    text-decoration: none; transition: transform var(--t-base) var(--ease-out);
+  }
+  .events:hover { transform: translateY(-2px); color: var(--on-green-muted); }
+  .events__text { display: grid; gap: var(--s-4); justify-items: start; }
+  .events h3 { color: var(--on-green); font-size: var(--step-3); }
+
+  .alg { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-8); align-items: start; }
+  .alg__copy { display: grid; gap: var(--s-5); }
+  .alg__list { background: var(--menta); border-radius: var(--r-board); padding: clamp(1.25rem, 1rem + 1.5vw, 2.25rem); }
+  .alg__h { font-family: var(--font-body); font-size: var(--step-0); font-weight: 700; margin-bottom: var(--s-4); letter-spacing: 0; }
+
+  .chef { display: grid; grid-template-columns: 5fr 7fr; gap: var(--s-8); align-items: center; }
+  .chef__copy { display: grid; gap: var(--s-5); justify-items: start; }
+  .chef blockquote p { font-family: var(--font-display); font-size: var(--step-2); line-height: 1.35; color: var(--ink-head); max-width: 30ch; }
+
+  .faqwrap { display: grid; grid-template-columns: 4fr 7fr; gap: var(--s-8); align-items: start; }
+  .faqwrap .section-head { position: sticky; top: 110px; margin-bottom: 0; }
+
+  @media (max-width: 980px) {
+    .hero__grid { grid-template-columns: 1fr; min-height: 0; }
+    .hero h1 { max-width: 16ch; }
+    .why, .chef, .alg, .faqwrap { grid-template-columns: 1fr; gap: var(--s-6); }
+    .faqwrap .section-head { position: static; }
+    .why :global(.why__photo) { max-width: 520px; }
+    .events { grid-template-columns: 1fr; }
+  }
+  /* Phone: same content, less height. Photos that sit beside text on desktop would
+     otherwise stack full-width and eat whole screens. */
+  @media (max-width: 760px) {
+    /* the P1 photo repeats Marius, who has his own section below: on a phone it only costs height */
+    .why :global(.why__photo) { display: none; }
+    .why__list { grid-template-columns: 1fr; gap: var(--s-5); }
+    .why__list li { padding-top: var(--s-3); }
+
+    .who { grid-template-columns: 1fr; gap: var(--s-4); }
+    .who__card { grid-template-columns: 6.5rem 1fr; align-items: center; gap: var(--s-4); }
+    .who :global(.photo) { aspect-ratio: 1 / 1; border-radius: 12px; }
+    .who :global(.photo__tag) { display: none; }
+    .who__text p { margin-top: 2px; font-size: 0.975rem; line-height: 1.45; }
+    .who__card h3 { font-size: var(--step-1); gap: var(--s-2); }
+
+    .events { margin-top: var(--s-6); gap: var(--s-5); }
+    .events h3 { font-size: var(--step-2); }
+
+    .chef { grid-template-columns: 1fr; gap: var(--s-4); }
+    .chef :global(.photo) { width: 7.5rem; aspect-ratio: 1 / 1; border-radius: 50%; }
+    .chef :global(.photo__tag) { display: none; }
+    .chef blockquote p { font-size: var(--step-1); }
+
+    .alg { gap: var(--s-5); }
+  }
+</style>

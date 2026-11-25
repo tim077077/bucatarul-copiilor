@@ -1,0 +1,115 @@
+---
+import Logo from './Logo.astro';
+import Button from './Button.astro';
+import Icon from './Icon.astro';
+import { nav, site } from '../data/site';
+const path = Astro.url.pathname.replace(/\.html$/, '').replace(/\/$/, '') || '/';
+---
+<header class="hdr" data-hdr>
+  <div class="wrap hdr__in">
+    <a href="/" class="hdr__logo" aria-label="Bucătarul copiilor, pagina principală" transition:name="logo">
+      <Logo variant="horizontal" />
+    </a>
+    <nav class="hdr__nav" aria-label="Principal">
+      <ul>
+        {nav.map((n) => (
+          <li><a href={n.href} class="hdr__link" aria-current={path === n.href ? 'page' : undefined}>{n.label}</a></li>
+        ))}
+      </ul>
+    </nav>
+    <div class="hdr__cta">
+      <a class="hdr__phone tabular" href={site.phoneHref}><Icon name="phone" size={20} />{site.phone}</a>
+      <Button href="/contact">Cere o ofertă</Button>
+    </div>
+    <button class="hdr__burger" type="button" aria-expanded="false" aria-controls="menu" data-burger>
+      <span class="visually-hidden">Deschide meniul</span>
+      <span class="hdr__bars" aria-hidden="true"></span>
+    </button>
+  </div>
+  <div id="menu" class="menu on-green" data-menu hidden>
+    <nav aria-label="Mobil" class="wrap">
+      <ul>
+        <li><a href="/">Acasă</a></li>
+        {nav.map((n) => <li><a href={n.href}>{n.label}</a></li>)}
+        <li><a href="/contact">Cere o ofertă</a></li>
+      </ul>
+      <p class="menu__contact">
+        <a href={site.phoneHref} class="tabular">{site.phone}</a><br />
+        <a href={`mailto:${site.email}`}>{site.email}</a>
+      </p>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .hdr { position: sticky; top: 0; z-index: 50; background: var(--bg); transition: box-shadow var(--t-base), background-color var(--t-base); }
+  .hdr.is-scrolled { box-shadow: 0 1px 0 var(--line), 0 8px 24px -16px rgb(18 48 31 / 0.25); }
+  .hdr__in { display: flex; align-items: center; gap: var(--s-6); height: 5.25rem; transition: height var(--t-base) var(--ease-out); }
+  .hdr.is-scrolled .hdr__in { height: 4.25rem; }
+  .hdr__logo { color: var(--patrunjel); display: block; height: 3.25rem; aspect-ratio: 1880 / 820; flex: none; transition: height var(--t-base) var(--ease-out); }
+  .hdr.is-scrolled .hdr__logo { height: 2.625rem; }
+  .hdr__logo :global(.logo) { width: 100%; height: 100%; }
+  .hdr__nav { margin-inline: auto; }
+  .hdr__nav ul { display: flex; gap: var(--s-6); list-style: none; padding: 0; }
+  .hdr__link {
+    color: var(--ink-head); font-weight: 500; text-decoration: none; padding-block: 6px;
+    background: linear-gradient(currentColor, currentColor) 0 100% / 0 2px no-repeat;
+    transition: background-size var(--t-base) var(--ease-out);
+  }
+  .hdr__link:hover, .hdr__link[aria-current='page'] { background-size: 100% 2px; color: var(--ink-head); }
+  .hdr__cta { display: flex; align-items: center; gap: var(--s-5); }
+  .hdr__phone { display: inline-flex; align-items: center; gap: 6px; color: var(--ink-head); font-weight: 700; text-decoration: none; }
+  .hdr__phone:hover { color: var(--rosie); }
+  .hdr__burger { display: none; margin-left: auto; width: 48px; height: 48px; border: 0; border-radius: 50%; background: var(--menta); position: relative; }
+  .hdr__bars, .hdr__bars::before, .hdr__bars::after { position: absolute; left: 14px; width: 20px; height: 2px; background: var(--patrunjel); border-radius: 2px; transition: transform var(--t-base) var(--ease-out), opacity var(--t-fast); }
+  .hdr__bars { top: 23px; }
+  .hdr__bars::before { content: ''; left: 0; top: -6px; }
+  .hdr__bars::after { content: ''; left: 0; top: 6px; }
+  [aria-expanded='true'] .hdr__bars { background: transparent; }
+  [aria-expanded='true'] .hdr__bars::before { transform: translateY(6px) rotate(45deg); }
+  [aria-expanded='true'] .hdr__bars::after { transform: translateY(-6px) rotate(-45deg); }
+
+  .menu { position: fixed; inset: 68px 0 0; background: var(--patrunjel); color: var(--on-green); padding-block: var(--s-7); overflow-y: auto; }
+  .menu:not([hidden]) { animation: menu-in var(--t-slow) var(--ease-out); }
+  .menu ul { list-style: none; padding: 0; display: grid; gap: var(--s-2); }
+  .menu ul a { font-family: var(--font-display); font-size: var(--step-3); color: var(--on-green); text-decoration: none; display: block; padding-block: 6px; }
+  .menu__contact { margin-top: var(--s-7); color: var(--on-green-muted); line-height: 2; }
+  .menu__contact a { color: var(--on-green); }
+  @keyframes menu-in { from { opacity: 0; clip-path: inset(0 0 100% 0); } to { opacity: 1; clip-path: inset(0); } }
+
+  @media (max-width: 1100px) { .hdr__phone { display: none; } .hdr__nav ul { gap: var(--s-5); } }
+  @media (max-width: 920px) {
+    .hdr__nav, .hdr__cta { display: none; }
+    .hdr__burger { display: block; }
+    .hdr__in, .hdr.is-scrolled .hdr__in { height: 4.25rem; }
+    .hdr__logo, .hdr.is-scrolled .hdr__logo { height: 2.625rem; }
+  }
+</style>
+
+<script>
+  function initHeader() {
+    const hdr = document.querySelector<HTMLElement>('[data-hdr]');
+    const burger = document.querySelector<HTMLButtonElement>('[data-burger]');
+    const menu = document.querySelector<HTMLElement>('[data-menu]');
+    if (!hdr || !burger || !menu || hdr.dataset.ready) return;
+    hdr.dataset.ready = '1';
+    const onScroll = () => hdr.classList.toggle('is-scrolled', window.scrollY > 12);
+    onScroll();
+    const w = window as any;
+    if (w.__hdrScroll) window.removeEventListener('scroll', w.__hdrScroll);
+    w.__hdrScroll = onScroll;
+    window.addEventListener('scroll', onScroll, { passive: true });
+    const setOpen = (open: boolean) => {
+      burger.setAttribute('aria-expanded', String(open));
+      burger.querySelector('.visually-hidden')!.textContent = open ? 'Închide meniul' : 'Deschide meniul';
+      menu.hidden = !open;
+      document.body.style.overflow = open ? 'hidden' : '';
+      if (open) menu.querySelector<HTMLAnchorElement>('a')?.focus();
+    };
+    burger.addEventListener('click', () => setOpen(burger.getAttribute('aria-expanded') !== 'true'));
+    menu.addEventListener('keydown', (e) => { if (e.key === 'Escape') { setOpen(false); burger.focus(); } });
+    menu.addEventListener('click', (e) => { if ((e.target as HTMLElement).closest('a')) setOpen(false); });
+  }
+  document.addEventListener('astro:page-load', initHeader);
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initHeader); else initHeader();
+</script>

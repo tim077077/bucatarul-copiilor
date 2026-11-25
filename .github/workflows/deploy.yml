@@ -1,0 +1,63 @@
+# Builds the site and uploads it to the cPanel hosting over FTPS.
+#   push to "main"    -> www.bucatarulcopiilor.ro   (FTP account limited to public_html)
+#   push to "preview" -> nou.bucatarulcopiilor.ro   (FTP account limited to that folder)
+# Secrets (GitHub repo > Settings > Secrets and variables > Actions):
+#   FTP_SERVER, FTP_USERNAME, FTP_PASSWORD                  for main
+#   FTP_PREVIEW_USERNAME, FTP_PREVIEW_PASSWORD              for preview
+name: Deploy
+
+on:
+  push:
+    branches: [main, preview]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-${{ github.ref_name }}
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Build (live site)
+        if: github.ref_name == 'main'
+        run: npx astro build --outDir out
+        env:
+          PUBLIC_DRAFT: 'false'
+
+      - name: Build (preview, with "de confirmat" notes)
+        if: github.ref_name == 'preview'
+        run: npx astro build --outDir out && node tools/preview-htaccess.mjs out
+        env:
+          PUBLIC_DRAFT: 'true'
+
+      - name: Upload to cPanel (live)
+        if: github.ref_name == 'main'
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ftps
+          local-dir: ./out/
+          server-dir: ./
+
+      - name: Upload to cPanel (preview)
+        if: github.ref_name == 'preview'
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_PREVIEW_USERNAME }}
+          password: ${{ secrets.FTP_PREVIEW_PASSWORD }}
+          protocol: ftps
+          local-dir: ./out/
+          server-dir: ./

@@ -1,0 +1,68 @@
+---
+import Logo from './Logo.astro';
+import Icon from './Icon.astro';
+import { nav, site } from '../data/site';
+---
+<footer class="ftr on-green">
+  <svg class="ftr__edge" viewBox="0 0 1440 48" preserveAspectRatio="none" aria-hidden="true"><path d="M0 48V22C160 4 300 0 460 14s300 30 480 18 340-30 500-14v28z" fill="currentColor"/></svg>
+  <div class="wrap ftr__grid">
+    <div class="ftr__brand">
+      <a href="/" aria-label="Bucătarul copiilor, pagina principală" class="ftr__logo"><Logo variant="stacked" /></a>
+      <p>Mâncare gătită zilnic pentru creșe, grădinițe și afterschool-uri.</p>
+    </div>
+    <div class="ftr__pages">
+      <h2 class="ftr__h">Pagini</h2>
+      <ul>
+        <li><a href="/">Acasă</a></li>
+        {nav.map((n) => <li><a href={n.href}>{n.label}</a></li>)}
+        <li><a href="/contact">Cere o ofertă</a></li>
+      </ul>
+    </div>
+    <div>
+      <h2 class="ftr__h">Contact</h2>
+      <ul class="ftr__contact">
+        <li><a href={site.phoneHref} class="tabular"><Icon name="phone" size={20} />{site.phone}</a></li>
+        <li><a href={site.whatsappHref} rel="noopener" target="_blank"><Icon name="whatsapp-logo" size={20} />WhatsApp</a></li>
+        <li><a href={`mailto:${site.email}`}><Icon name="envelope-simple" size={20} />{site.email}</a></li>
+        <li><a href={site.mapHref} rel="noopener" target="_blank"><Icon name="map-pin" size={20} />{site.address.street}, {site.address.locality}, {site.address.county}</a></li>
+      </ul>
+    </div>
+    <div>
+      <h2 class="ftr__h">Urmăriți-ne</h2>
+      <ul class="ftr__contact">
+        <li><a href={site.facebook} rel="noopener" target="_blank"><Icon name="facebook-logo" size={20} />Facebook</a></li>
+        <li><a href={site.instagram} rel="noopener" target="_blank"><Icon name="instagram-logo" size={20} />Instagram</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="wrap ftr__base small">
+    <p>© {new Date().getFullYear()} Bucătarul copiilor</p>
+    <a href="/confidentialitate">Politica de confidențialitate</a>
+  </div>
+</footer>
+<style>
+  .ftr { position: relative; background: var(--patrunjel); color: var(--on-green-muted); padding-block: var(--s-9) var(--s-6); margin-top: 48px; }
+  .ftr__edge { position: absolute; left: 0; right: 0; top: -46px; width: 100%; height: 48px; color: var(--patrunjel); }
+  .ftr__grid { display: grid; grid-template-columns: 1.4fr 1fr 1.4fr 1fr; gap: var(--s-7); }
+  .ftr .ftr__logo { display: block; width: 96px; color: var(--on-green); margin-bottom: var(--s-5); }
+  .ftr__brand p { max-width: 28ch; }
+  .ftr__h { font-family: var(--font-body); font-size: var(--step-0); font-weight: 700; color: var(--on-green); margin-bottom: var(--s-4); letter-spacing: 0; }
+  .ftr ul { list-style: none; padding: 0; display: grid; gap: var(--s-3); }
+  .ftr a { color: var(--on-green-muted); text-decoration: none; transition: color var(--t-fast); }
+  .ftr a:hover { color: var(--on-green); text-decoration: underline; }
+  .ftr__contact a { display: inline-flex; align-items: flex-start; gap: 10px; }
+  .ftr__contact :global(.icon) { flex: none; margin-top: 2px; color: var(--galbenus); }
+  .ftr__base { display: flex; justify-content: space-between; gap: var(--s-4); flex-wrap: wrap; border-top: 1px solid rgb(255 249 238 / 0.15); margin-top: var(--s-8); padding-top: var(--s-5); }
+  @media (max-width: 920px) { .ftr__grid { grid-template-columns: 1fr 1fr; } .ftr__brand { grid-column: 1 / -1; } }
+  @media (max-width: 520px) {
+    /* Phone: page links are already in the burger menu and the bottom bar, so the footer keeps contact only */
+    .ftr { padding-top: var(--s-7); }
+    .ftr__grid { grid-template-columns: 1fr; gap: var(--s-6); }
+    .ftr__pages { display: none; }
+    .ftr__brand { display: grid; grid-template-columns: 64px 1fr; gap: var(--s-5); align-items: center; }
+    .ftr .ftr__logo { width: 64px; margin-bottom: 0; }
+    .ftr ul { gap: var(--s-2); }
+    .ftr__grid > :last-child ul { display: flex; flex-wrap: wrap; gap: var(--s-2) var(--s-6); }
+    .ftr__base { margin-top: var(--s-6); }
+  }
+</style>

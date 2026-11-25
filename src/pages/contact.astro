@@ -1,0 +1,38 @@
+---
+import Base from '../layouts/Base.astro';
+import OfferForm from '../components/OfferForm.astro';
+import Icon from '../components/Icon.astro';
+import { site } from '../data/site';
+---
+<Base title="Cere o ofertă" description="Cereți o ofertă de catering pentru creșă, grădiniță sau afterschool. Sunați la 0743 064 433 sau completați formularul. Bucătarul copiilor, Ghiroda, Timiș.">
+  <section class="contact">
+    <div class="wrap contact__grid">
+      <div class="contact__intro">
+        <h1>Cere o ofertă</h1>
+        <p class="lead">Completați formularul și vă trimitem prețul pe porție și un exemplu de meniu pentru copiii voștri. Fără niciun angajament.</p>
+        <ul class="contact__list">
+          <li><Icon name="phone" size={24} /><div><p class="k">Telefon</p><a href={site.phoneHref} class="tabular">{site.phone}</a></div></li>
+          <li><Icon name="whatsapp-logo" size={24} /><div><p class="k">WhatsApp</p><a href={site.whatsappHref} rel="noopener" target="_blank">Scrieți-ne pe WhatsApp</a></div></li>
+          <li><Icon name="envelope-simple" size={24} /><div><p class="k">Email</p><a href={`mailto:${site.email}`}>{site.email}</a></div></li>
+          <li><Icon name="map-pin" size={24} /><div><p class="k">Bucătăria</p><a href={site.mapHref} rel="noopener" target="_blank">{site.address.street}, {site.address.locality}, {site.address.county}</a></div></li>
+        </ul>
+      </div>
+      <div class="contact__form">
+        <OfferForm variant="full" id="oferta" />
+      </div>
+    </div>
+  </section>
+</Base>
+<style>
+  .contact { padding-block: clamp(2.5rem, 1.5rem + 4vw, 5rem) var(--section-y); }
+  .contact__grid { display: grid; grid-template-columns: 5fr 7fr; gap: var(--s-8); align-items: start; }
+  .contact__intro { display: grid; gap: var(--s-5); position: sticky; top: 110px; }
+  .contact__list { list-style: none; padding: 0; display: grid; gap: var(--s-5); margin-top: var(--s-4); }
+  .contact__list li { display: flex; gap: var(--s-4); align-items: flex-start; }
+  .contact__list :global(.icon) { flex: none; color: var(--patrunjel); background: var(--menta); border-radius: 50%; padding: 10px; width: 44px; height: 44px; }
+  .k { font-size: var(--step--1); color: var(--ink-muted); }
+  .contact__list a { color: var(--ink-head); font-weight: 700; text-decoration: none; }
+  .contact__list a:hover { color: var(--rosie); text-decoration: underline; }
+  .contact__form { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-board); padding: clamp(1.25rem, 1rem + 2vw, 2.5rem); box-shadow: var(--shadow-2); }
+  @media (max-width: 900px) { .contact__grid { grid-template-columns: 1fr; } .contact__intro { position: static; } }
+</style>

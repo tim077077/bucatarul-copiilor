@@ -1,0 +1,30 @@
+---
+import Base from '../layouts/Base.astro';
+import { site, isDraft } from '../data/site';
+---
+<Base title="Politica de confidențialitate" description="Cum folosește Bucătarul copiilor datele trimise prin formularul de ofertă.">
+  <article class="section">
+    <div class="wrap legal stack">
+      <h1>Politica de confidențialitate</h1>
+      {isDraft && <p class="muted small">Text-cadru, de verificat de un jurist înainte de lansare.</p>}
+      <p class="muted small">Ultima actualizare: noiembrie 2026.</p>
+      <h2>Ce date colectăm</h2>
+      <p>Când completați formularul de ofertă, ne trimiteți numele, instituția, telefonul, opțional emailul și detaliile despre copii (număr, vârste, alergii la nivel de grupă). Nu cerem date despre copii individuali.</p>
+      <h2>De ce le folosim</h2>
+      <p>Doar ca să vă contactăm cu o ofertă de catering și să discutăm colaborarea. Nu trimitem newslettere și nu vindem datele nimănui.</p>
+      <h2>Cât le păstrăm</h2>
+      <p>Păstrăm cererile cel mult 12 luni dacă nu încheiem un contract, apoi le ștergem.</p>
+      <h2>Cine le procesează</h2>
+      <p>Formularul este trimis direct pe serverul nostru de găzduire (TLH, România), care ne trimite cererea pe email. O copie a cererii rămâne pe server ca să nu se piardă, și o ștergem când nu mai este necesară. Site-ul nu folosește cookie-uri de marketing.</p>
+      <h2>Drepturile voastre</h2>
+      <p>Puteți cere oricând să vedeți, să corectați sau să ștergeți datele voastre, scriind la <a href={`mailto:${site.email}`}>{site.email}</a>. Aveți dreptul să depuneți plângere la ANSPDCP.</p>
+      <h2>Operator</h2>
+      <p>Bucătarul copiilor, {site.address.street}, {site.address.locality}, {site.address.county}. Telefon <a href={site.phoneHref}>{site.phone}</a>.</p>
+    </div>
+  </article>
+</Base>
+<style>
+  .legal { max-width: 720px; }
+  .legal h1 { font-size: var(--step-4); }
+  .legal h2 { font-size: var(--step-2); margin-top: var(--s-7); }
+</style>

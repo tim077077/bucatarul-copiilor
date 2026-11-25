@@ -1,0 +1,55 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import Photo from '../components/Photo.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { site, isDraft } from '../data/site';
+---
+<Base title="Despre noi" description="Bucătarul copiilor: Chef Marius și echipa gătesc zilnic pentru creșe și grădinițe, de 14 ani, în bucătăria din Ghiroda.">
+  <PageHero title="Bucătăria din Ghiroda" lead={`De ${site.years} ani, Chef Marius și echipa lui gătesc în fiecare dimineață pentru copiii din creșele, grădinițele și afterschool-urile pe care le servim.`} shot="K1" brief="Bucătăria Bucătarul copiilor, cadru larg: echipa la lucru, inox curat, lumină naturală." ratio="3 / 2" />
+
+  <section class="section section--alt" aria-labelledby="story-h">
+    <div class="wrap story">
+      <Photo reveal="wipe" shot="C1" brief="Portret Chef Marius în bucătărie, zâmbind, șorț și boneta de bucătar." ratio="4 / 5" />
+      <div class="stack">
+        <h2 id="story-h">Chef Marius</h2>
+        <p class="lead">Lumea îl știe ca Bucătarul copiilor. Gătește pentru cei mici de {site.years} ani, iar azi mâncarea lui ajunge zilnic în peste {site.locations} de unități.</p>
+        <p>Meniul pe 4 săptămâni îl face chiar el, iar fiecare preparat trece prin mâna lui înainte să plece spre grădinițe. Pentru el, o masă reușită e una pe care copiii o termină.</p>
+        {isDraft && <p class="small muted">Text de confirmat cu Marius.</p>}
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="val-h">
+    <div class="wrap">
+      <div class="section-head"><h2 id="val-h">În ce credem</h2></div>
+      <ul class="vals">
+        <li><h3>Mâncare simplă și proaspătă</h3><p>Preparate pe care copiii le recunosc, gătite în aceeași zi.</p></li>
+        <li><h3>Seriozitate</h3><p>Mâncarea ajunge caldă și la timp, în fiecare zi, iar prețul rămâne cel stabilit.</p></li>
+        <li><h3>Grijă pentru fiecare copil</h3><p>Porții pe vârste și variante pentru alergii, pentru că fiecare copil are nevoile lui.</p></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section section--alt" aria-labelledby="kit-h">
+    <div class="wrap">
+      <div class="section-head"><h2 id="kit-h">Bucătăria și echipa</h2></div>
+      <div class="kit" data-reveal="stagger">
+        <Photo shot="K2" brief="Echipa bucătăriei, fotografie de grup în haine de lucru." ratio="3 / 2" />
+        <Photo shot="P4" brief="Lăzi cu legume și fructe proaspete în bucătărie." ratio="1 / 1" />
+        <Photo shot="K3" brief="Detaliu de curățenie: blat de inox, ustensile aranjate, mâini cu mănuși." ratio="1 / 1" />
+      </div>
+    </div>
+  </section>
+
+  <CtaBand />
+</Base>
+<style>
+  .story { display: grid; grid-template-columns: 5fr 7fr; gap: var(--s-8); align-items: center; }
+  .vals { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--s-6); }
+  .vals li { border-top: 2px solid var(--patrunjel); padding-top: var(--s-4); }
+  .vals h3 { font-size: var(--step-1); margin-bottom: var(--s-2); }
+  .vals p { color: var(--ink-muted); }
+  .kit { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: var(--s-5); align-items: end; }
+  @media (max-width: 900px) { .story, .vals { grid-template-columns: 1fr; gap: var(--s-6); } .kit { grid-template-columns: 1fr 1fr; } .kit > :first-child { grid-column: 1 / -1; } }
+</style>

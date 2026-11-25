@@ -1,0 +1,28 @@
+{
+  "name": "bucatarul-copiilor",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "logo": "node tools/build-logo.mjs"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@astrojs/sitemap": "^3.7.4",
+    "@fontsource/figtree": "^5.3.0",
+    "@fontsource/young-serif": "^5.3.0",
+    "@phosphor-icons/core": "^2.1.1",
+    "astro": "^5.18.2"
+  },
+  "devDependencies": {
+    "axe-core": "^4.14.0",
+    "cheerio": "^1.2.0",
+    "potrace": "^2.1.8",
+    "sharp": "^0.35.5"
+  },
+  "type": "module"
+}

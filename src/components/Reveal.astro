@@ -1,0 +1,32 @@
+---
+// Scroll reveals, applied by rule (see global.css):
+//   wipe    – a large photo that carries a section
+//   stagger – content that is a series (children appear one after another)
+//   settle  – a wide photo in a band slowly settles to scale 1
+// Elements already on screen at load are never hidden; reduced motion skips everything.
+---
+<script>
+  function initReveal() {
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (!e.isIntersecting) return;
+        const t = e.target as HTMLElement;
+        t.classList.add('is-on');
+        io.unobserve(t);
+        // once played, hand the element back to its normal styles (keeps hover zooms working)
+        setTimeout(() => t.classList.remove('is-armed', 'is-on'), 2000);
+      });
+    }, { rootMargin: '0px 0px -15% 0px' });
+    document.querySelectorAll<HTMLElement>('[data-reveal]').forEach((el) => {
+      if (el.dataset.revealReady || !el.offsetParent) return; // hidden single-file page: init when shown
+      el.dataset.revealReady = '1';
+      if (el.getBoundingClientRect().top < innerHeight) return; // already (partly) visible: leave it
+      if (el.dataset.reveal === 'stagger') [...el.children].forEach((c, i) => (c as HTMLElement).style.setProperty('--i', String(i)));
+      el.classList.add('is-armed');
+      io.observe(el);
+    });
+  }
+  document.addEventListener('astro:page-load', initReveal);
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initReveal); else initReveal();
+</script>

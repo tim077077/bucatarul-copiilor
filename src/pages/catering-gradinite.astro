@@ -1,0 +1,95 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import Photo from '../components/Photo.astro';
+import Faq from '../components/Faq.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { faqSchema } from '../data/faq';
+
+const ages = [
+  { id: 'cresa', title: 'Creșă', age: '1–3 ani', shot: 'A1', brief: 'Copil mic mâncând cu lingurița, fotografiat din spate.',
+    points: ['Texturi adaptate: piureuri, bucăți mici, fără condimente iuți', 'Porții mici, potrivite vârstei', 'Mic dejun, prânz cald și gustare'] },
+  { id: 'gradinita', title: 'Grădiniță', age: '3–6 ani', shot: 'A2', brief: 'Grupă de grădiniță la masa de prânz, fără fețe identificabile.',
+    points: ['Trei mese pe zi, cu supă sau ciorbă și fel principal la prânz', 'Gustări făcute în casă', 'Porții adaptate nevoilor fiecărei grupe'] },
+  { id: 'afterschool', title: 'Afterschool', age: '6–12 ani', shot: 'A3', brief: 'Școlari la prânz în afterschool, unghi lateral.',
+    points: ['Prânz complet după școală', 'Gustare pentru după-amiază', 'Porții pentru copii care cresc repede'] },
+];
+---
+<Base title="Catering pentru creșe, grădinițe și afterschool" description="Catering zilnic pentru creșe, grădinițe și afterschool-uri: meniu pe 4 săptămâni, porții pe vârste, livrare caldă, preț fix pe porție." schema={[faqSchema('gradinite')]}>
+  <PageHero title="Catering pentru creșe, grădinițe și afterschool" lead="Mâncare gătită în aceeași dimineață, adaptată vârstei și livrată caldă la voi. De 14 ani, pentru peste 56 de unități." shot="P2" brief="Mâini care porționează mâncarea caldă în recipiente termice pentru livrare." />
+
+  <section class="section section--alt" id="varste" aria-labelledby="varste-h">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 id="varste-h">Meniuri pe vârste</h2>
+        <p>Fiecare grupă de vârstă primește porțiile potrivite pentru ea.</p>
+      </div>
+      <div class="ages" data-reveal="stagger">
+        {ages.map((a) => (
+          <article class="age" id={a.id}>
+            <Photo shot={a.shot} brief={a.brief} ratio="4 / 3" />
+            <h3>{a.title} <span class="pill-age">{a.age}</span></h3>
+            <ul class="ticks">{a.points.map((p) => <li>{p}</li>)}</ul>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="zi-h">
+    <div class="wrap split">
+      <div class="stack">
+        <h2 id="zi-h">Cum arată o zi cu noi</h2>
+        <p class="lead">Voi vă ocupați de copii. Noi ne ocupăm ca mâncarea să fie gata, caldă, la ora mesei.</p>
+        <dl class="day">
+          <div><dt>Dimineața</dt><dd>Gătim totul proaspăt, în bucătăria din Ghiroda.</dd></div>
+          <div><dt>Înainte de masă</dt><dd>Livrăm mâncarea caldă, în recipiente termice, la ora stabilită cu voi.</dd></div>
+          <div><dt>La masă</dt><dd>Copiii primesc porții adaptate vârstei, iar cei cu alergii varianta lor.</dd></div>
+        </dl>
+        <p class="small muted">Orele exacte de livrare le stabilim la semnarea contractului.</p>
+      </div>
+      <Photo shot="P3" brief="Lăzi termice cu mâncare descărcate la ușa unei grădinițe, dimineața; fără copii în cadru." ratio="4 / 5" />
+    </div>
+  </section>
+
+  <section class="section section--alt" aria-labelledby="start-h">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 id="start-h">Cum începem</h2>
+        <p>Trei pași până la prima livrare.</p>
+      </div>
+      <ol class="start">
+        <li><h3>Cereți o ofertă</h3><p>Completați formularul sau sunați-ne. Ne spuneți câți copii aveți, ce vârste și ce mese vă trebuie.</p></li>
+        <li><h3>Primiți meniul și prețul</h3><p>Vă trimitem oferta cu prețul fix pe porție și un exemplu de meniu pentru grupele voastre.</p></li>
+        <li><h3>Prima livrare</h3><p>Semnăm contractul, stabilim ora livrării și începem să gătim pentru copiii voștri.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="faq-h">
+    <div class="wrap narrow">
+      <h2 id="faq-h" class="faq-title">Întrebări despre catering</h2>
+      <Faq tag="gradinite" />
+    </div>
+  </section>
+
+  <CtaBand />
+</Base>
+<style>
+  .ages { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--s-6); }
+  .age { display: grid; gap: var(--s-4); align-content: start; scroll-margin-top: 110px; }
+  .age h3 { display: flex; align-items: baseline; gap: var(--s-3); }
+  .pill-age { font-family: var(--font-body); font-size: var(--step--1); font-weight: 700; color: var(--patrunjel); background: var(--galbenus-100); padding: 3px 10px; border-radius: var(--r-pill); }
+  .split { display: grid; grid-template-columns: 7fr 5fr; gap: var(--s-8); align-items: center; }
+  .day { display: grid; margin-top: var(--s-6); }
+  .day div { display: grid; grid-template-columns: 9rem 1fr; gap: var(--s-4); padding-block: var(--s-4); border-top: 1px dashed var(--line-strong); }
+  .day dt { font-weight: 700; color: var(--ink-head); }
+  .start { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--s-6); counter-reset: st; }
+  .start li { counter-increment: st; background: var(--surface); border-radius: var(--r-card); padding: var(--s-6); box-shadow: var(--shadow-1); }
+  .start li::before { content: counter(st); display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; background: var(--rosie); color: #fff; font-weight: 700; margin-bottom: var(--s-4); }
+  .start h3 { margin-bottom: var(--s-2); }
+  .start p { color: var(--ink-muted); }
+  .narrow { max-width: 820px; }
+  .faq-title { margin-bottom: var(--s-6); }
+  @media (max-width: 900px) { .ages, .start { grid-template-columns: 1fr; } .split { grid-template-columns: 1fr; } .day div { grid-template-columns: 1fr; gap: 2px; } }
+</style>

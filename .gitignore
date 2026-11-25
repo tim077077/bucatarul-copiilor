@@ -1,0 +1,11 @@
+node_modules
+dist
+.astro
+tools/_mask.png
+tools/preview-*.png
+shots
+dist-*
+*.zip
+bucatarul-copiilor.html
+.env
+oferte-site.log

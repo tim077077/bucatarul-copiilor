@@ -1,0 +1,27 @@
+---
+import Icon from './Icon.astro';
+import { site } from '../data/site';
+---
+<nav class="mbar" aria-label="Contact rapid">
+  <a href={site.phoneHref}><Icon name="phone" size={22} />Sună</a>
+  <a href={site.whatsappHref} rel="noopener" target="_blank"><Icon name="whatsapp-logo" size={22} />WhatsApp</a>
+  <a href="/contact" class="mbar__main"><Icon name="paper-plane-tilt" size={22} />Cere ofertă</a>
+</nav>
+<style>
+  .mbar { display: none; }
+  @media (max-width: 920px) {
+    .mbar {
+      position: fixed; z-index: 40; left: 0; right: 0; bottom: 0; display: grid; grid-template-columns: 1fr 1fr 1.3fr;
+      gap: 6px; padding: 8px max(8px, env(safe-area-inset-left)) calc(8px + env(safe-area-inset-bottom));
+      background: var(--lapte); box-shadow: 0 -1px 0 var(--line), 0 -8px 24px -12px rgb(18 48 31 / 0.25);
+    }
+    .mbar a {
+      display: flex; align-items: center; justify-content: center; gap: 6px; min-height: 48px; border-radius: var(--r-pill);
+      color: var(--patrunjel); background: var(--menta); font-weight: 700; font-size: 0.9375rem; text-decoration: none;
+      transition: transform var(--t-fast) var(--ease-out);
+    }
+    .mbar a:active { transform: scale(0.97); }
+    .mbar .mbar__main { background: var(--rosie); color: #fff; }
+    :global(.ftr) { padding-bottom: calc(var(--s-6) + 80px); }
+  }
+</style>

@@ -1,0 +1,75 @@
+---
+// "Cum lucrăm": a real sequence, drawn as the delivery route from the kitchen in Ghiroda
+// to the kindergarten door. The page's single scroll-linked moment: the route draws once.
+import Icon from './Icon.astro';
+interface Props { steps: { icon: string; title: string; text: string }[] }
+const { steps } = Astro.props;
+---
+<ol class="route" data-route style={`--n:${steps.length}`}>
+  <svg class="route__line" viewBox="0 0 1000 120" preserveAspectRatio="none" aria-hidden="true">
+    <path class="route__base" d="M10 60 C 120 10, 210 110, 340 60 S 560 10, 670 60 S 880 110, 990 60" />
+    <path class="route__draw" pathLength="1" d="M10 60 C 120 10, 210 110, 340 60 S 560 10, 670 60 S 880 110, 990 60" />
+  </svg>
+  {steps.map((s, i) => (
+    <li class="route__stop" style={`--i:${i}`}>
+      <span class="route__pin"><Icon name={s.icon} size={28} /><span class="route__num" aria-hidden="true">{i + 1}</span></span>
+      <h3>{s.title}</h3>
+      <p>{s.text}</p>
+    </li>
+  ))}
+</ol>
+
+<style>
+  .route { position: relative; list-style: none; padding: 0; display: grid; grid-template-columns: repeat(var(--n), 1fr); gap: var(--s-6); counter-reset: s; }
+  .route__line { position: absolute; left: 36px; width: calc((var(--n) - 1) * ((100% - (var(--n) - 1) * var(--s-6)) / var(--n) + var(--s-6))); top: 0; height: 72px; overflow: visible; z-index: 0; }
+  .route__base, .route__draw { fill: none; stroke-width: 3; vector-effect: non-scaling-stroke; stroke-linecap: round; }
+  .route__base { stroke: var(--line-strong); stroke-dasharray: 2 10; }
+  .route__draw { stroke: var(--rosie); stroke-dasharray: 1; stroke-dashoffset: 0; }
+  .route__stop { position: relative; z-index: 1; }
+  .route__pin {
+    position: relative; display: grid; place-items: center; width: 72px; height: 72px; border-radius: 50%;
+    background: var(--surface); color: var(--patrunjel); box-shadow: var(--shadow-1), inset 0 0 0 2px var(--patrunjel-100);
+    margin-bottom: var(--s-5);
+  }
+  .route__num {
+    position: absolute; top: -4px; right: -4px; width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center;
+    background: var(--patrunjel); color: var(--on-green); font-size: 13px; font-weight: 700;
+  }
+  .route__stop h3 { font-size: var(--step-1); margin-bottom: var(--s-2); }
+  .route__stop p { color: var(--ink-muted); }
+
+  /* Drawn state: JS sets .is-armed before it enters view, .is-on when it does */
+  .route.is-armed .route__draw { stroke-dashoffset: 1; }
+  .route.is-armed .route__pin { transform: scale(0.6); opacity: 0; }
+  .route.is-on .route__draw { stroke-dashoffset: 0; transition: stroke-dashoffset 1600ms var(--ease-in-out); }
+  .route.is-on .route__pin { transform: none; opacity: 1; transition: transform 500ms var(--ease-out), opacity 300ms; transition-delay: calc(var(--i) * 380ms + 120ms); }
+
+  @media (max-width: 900px) {
+    .route { grid-template-columns: 1fr 1fr; row-gap: var(--s-7); }
+    .route__line { display: none; }
+  }
+  @media (max-width: 520px) {
+    .route { grid-template-columns: 1fr; gap: var(--s-6); }
+    .route__stop { display: grid; grid-template-columns: 72px 1fr; column-gap: var(--s-5); }
+    .route__pin { grid-row: span 2; margin: 0; }
+  }
+</style>
+
+<script>
+  function initRoute() {
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    document.querySelectorAll<HTMLElement>('[data-route]').forEach((el) => {
+      if (el.dataset.ready || !el.offsetParent) return; // hidden (single-file page not shown yet): init when shown
+      el.dataset.ready = '1';
+      const r = el.getBoundingClientRect();
+      if (r.top < innerHeight * 0.8) return; // already in view: leave it drawn
+      el.classList.add('is-armed');
+      const io = new IntersectionObserver((entries) => {
+        if (entries.some((e) => e.isIntersecting)) { el.classList.add('is-on'); io.disconnect(); }
+      }, { rootMargin: '0px 0px -25% 0px' });
+      io.observe(el);
+    });
+  }
+  document.addEventListener('astro:page-load', initRoute);
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initRoute); else initRoute();
+</script>
