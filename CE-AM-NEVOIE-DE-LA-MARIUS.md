@@ -44,7 +44,7 @@ Salut Marius! Ca să pot pune site-ul online, am nevoie de lucrurile de mai jos.
 - [ ] **Schimbă parola de cPanel** după ce termin. A circulat pe WhatsApp, deci nu mai e sigură.
 - [ ] **Emailul marius@bucatarulcopiilor.ro:** îl folosești? Unde îl citești (telefon, Outlook, webmail)? E găzduit tot la TLH, așa că nu-l ating. Vreau doar să știu că merge.
 - [ ] **Când expiră găzduirea și domeniul la TLH?** Ca să nu rămână site-ul jos din cauza unei facturi uitate.
-- [ ] **Formularul de ofertă:** îți vine un email de la Web3Forms cu o „cheie" (nu e parolă). Mi-o trimiți, și cererile de ofertă vor veni direct pe emailul tău.
+- [ ] **Formularul de ofertă:** cererile vin pe marius@bucatarulcopiilor.ro, de la no-reply@bucatarulcopiilor.ro. Fac o cerere de test și îmi confirmi că a ajuns (verifică și Spam).
 - [ ] **Google Business Profile** (fișa ta pe Google Maps): o ai? Dacă da, mă adaugi ca administrator. Ajută mult să apari când cineva caută „catering grădinițe Timișoara".
 - [ ] **Telefonul la îndemână** când facem setările: unele conturi îți trimit un cod prin SMS.
 
